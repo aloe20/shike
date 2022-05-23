@@ -1,0 +1,179 @@
+plugins {
+  id 'com.android.application'
+  id 'org.jetbrains.kotlin.android'
+  id 'org.jetbrains.kotlin.kapt'
+  id 'dagger.hilt.android.plugin'
+  id 'com.tencent.vasdolly'
+}
+
+android {
+  signingConfigs {
+    sign {
+      storeFile file('../key.jks')
+      storePassword '123456'
+      keyAlias 'android'
+      keyPassword '123456'
+      v1SigningEnabled true
+      v2SigningEnabled true
+    }
+  }
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.tools.get()
+  defaultConfig {
+//    applicationId "com.aloe.shike"
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
+    versionCode 1
+    versionName "1.0.0"
+    resConfigs 'zh', 'en'
+    signingConfig signingConfigs.sign
+    vectorDrawables.useSupportLibrary = true
+    buildConfigField 'String', 'BUILD_DATA', '"' + (new Date().format("yyyy-MM-dd HH:mm:ss")) + '"'
+    buildConfigField 'String', 'BUILD_GIT', '"' + getGitStatus() + '"'
+    vectorDrawables {
+      useSupportLibrary true
+    }
+    ndk {
+      abiFilters 'arm64-v8a'
+    }
+  }
+  /*splits {
+      abi {
+          enable true
+          reset()
+          include 'arm64-v8a'
+          universalApk false
+      }
+      density {
+          enable true
+          reset()
+          include 'xxhdpi', 'xxxhdpi'
+          exclude 'hdpi', 'ldpi', 'xhdpi'
+      }
+  }*/
+  buildTypes {
+    debug {
+      minifyEnabled false
+      shrinkResources false
+    }
+    release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = '11'
+    useIR = true
+    freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+  }
+  buildFeatures {
+    compose true
+  }
+  composeOptions {
+    kotlinCompilerExtensionVersion libs.versions.compose.get()
+  }
+  packagingOptions {
+    resources {
+      excludes += ['/META-INF/{AL2.0,LGPL2.1}', 'META-INF/**']
+    }
+    jniLibs {
+      excludes += ['META-INF/**']
+    }
+  }
+  flavorDimensions "app"
+  productFlavors {
+    standard {
+      dimension "app"
+    }
+    lite {
+      dimension "app"
+    }
+  }
+  lint {
+    abortOnError false
+    checkAllWarnings true
+    checkReleaseBuilds true
+    disable 'Typos'
+    htmlOutput file("$buildDir/quality/lint.html")
+    htmlReport true
+    ignoreWarnings false
+    lintConfig file('../config/lint-default.xml')
+    quiet true
+    warningsAsErrors true
+    xmlReport false
+  }
+  namespace 'com.aloe.shike'
+  sourceSets {
+    main {
+      res.srcDirs = ['src/main/res']
+      java {
+        srcDirs = ['src/main/java']
+        srcDirs.forEach {
+          file("${it.path}/${namespace.replace('.', '/')}/ui").listFiles().each {
+            res.srcDirs += file("${it.path}/res")
+          }
+        }
+      }
+    }
+  }
+  productFlavors.each { flavor ->
+    def props = new Properties()
+    file("../flavors/${flavor.name}.properties").withInputStream {
+      props.load(new InputStreamReader(it, "utf-8"))
+    }
+    flavor.applicationId props.getProperty("applicationId")
+    flavor.versionCode props.getProperty("versionCode").toInteger()
+    flavor.versionName props.getProperty("versionName")
+    flavor.resValue "string", "app_name", props.getProperty("appLabel")
+    flavor.buildConfigField 'String', 'APP_LABEL', "\"${props.getProperty("appLabel")}\""
+  }
+}
+channel {
+  //指定渠道文件
+  channelFile = file("../channel.txt")
+  //多渠道包的输出目录，默认为new File(project.buildDir,"channel")
+  outputDir = new File(project.buildDir, "channel")
+  //多渠道包的命名规则，默认为：${appName}-${versionName}-${versionCode}-${flavorName}-${buildType}-${buildTime}
+  apkNameFormat = '${appName}-' + project.android.defaultConfig.versionName + '-${flavorName}-${buildType}'
+  //快速模式：生成渠道包时不进行校验（速度可以提升10倍以上，默认为false）
+  fastMode = false
+  //buildTime的时间格式，默认格式：yyyyMMdd-HHmmss
+  buildTimeDateFormat = 'yyyy-MM-dd HH:mm:ss'
+  //低内存模式（仅针对V2签名，默认为false）：只把签名块、中央目录和EOCD读取到内存，不把最大头的内容块读取到内存，在手机上合成APK时，可以使用该模式
+  lowMemory = false
+}
+dependencies {
+  implementation project(path: ':ui:excel')
+  implementation project(path: ':ui:flu')
+  implementation project(path: ':ui:rn')
+  implementation project(path: ':ui:web')
+  implementation project(path: ':data:http')
+  implementation project(path: ':data:local')
+  implementation project(path: ':data:socket')
+  implementation libs.jetpack.activity
+  implementation libs.jetpack.appcompat
+  implementation libs.jetpack.metrics
+  implementation libs.jetpack.hilt.compose
+  implementation libs.accompanist.systemuicontroller
+  implementation libs.accompanist.insets
+  implementation libs.jetpack.compose.livedata
+  implementation libs.jetpack.compose.navigation
+  implementation libs.jetpack.compose.paging
+  implementation libs.jetpack.lifecycle.process
+  implementation libs.accompanist.pager
+  implementation libs.coil
+  implementation libs.vasdolly
+  implementation libs.dagger.android
+  kapt libs.dagger.compiler
+  testImplementation libs.junit
+}
+
+static def getGitStatus() {
+  String command = "git log -1 --pretty=format:%h|%d|%ad --date=format:%Y-%m-%d_%H:%M:%S"
+  return command.execute().text.replace(" ", "").replace("HEAD->", "").replace("_", " ")
+}

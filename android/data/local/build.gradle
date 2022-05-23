@@ -1,0 +1,56 @@
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+  id 'org.jetbrains.kotlin.kapt'
+  id 'com.google.protobuf'
+  id 'dagger.hilt.android.plugin'
+}
+
+android {
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.tools.get()
+  defaultConfig {
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+  namespace 'com.aloe.local'
+}
+
+protobuf {
+  protoc {
+    artifact = libs.protobuf.protoc.get()
+  }
+  generateProtoTasks {
+    all().each { task ->
+      task.builtins {
+        java {
+          option "lite"
+        }
+      }
+    }
+  }
+}
+
+dependencies {
+  implementation libs.jetpack.store.pref
+  implementation libs.protobuf.lite
+  implementation libs.dagger.android
+  implementation libs.jetpack.room
+  api libs.okio
+  kapt libs.dagger.compiler
+}

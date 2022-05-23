@@ -1,0 +1,41 @@
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+  id 'org.jetbrains.kotlin.kapt'
+  id 'dagger.hilt.android.plugin'
+}
+
+android {
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.tools.get()
+  defaultConfig {
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
+      consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+    namespace 'com.aloe.socket'
+}
+
+dependencies {
+  api libs.jetpack.work
+  api libs.jetpack.hilt.work
+  kapt libs.jetpack.hilt.compiler
+  implementation libs.netty
+  implementation libs.coroutines.core
+  implementation libs.dagger.android
+  kapt libs.dagger.compiler
+}

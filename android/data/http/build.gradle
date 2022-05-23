@@ -1,0 +1,45 @@
+plugins {
+  id 'com.android.library'
+  id 'org.jetbrains.kotlin.android'
+  id 'org.jetbrains.kotlin.kapt'
+  id 'dagger.hilt.android.plugin'
+}
+
+android {
+  def properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+  def host = properties.getProperty('HOST') ?: "https://www.wanandroid.com/"
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.tools.get()
+  defaultConfig {
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
+      consumerProguardFiles "consumer-rules.pro"
+    buildConfigField('String', 'host', '"' + host + '"')
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+    namespace 'com.aloe.http'
+}
+
+dependencies {
+  api project(path: ':data:bean')
+  api libs.jetpack.work
+  api libs.jetpack.hilt.work
+  kapt libs.jetpack.hilt.compiler
+  implementation libs.retrofit.moshi
+  implementation libs.dagger.android
+  kapt libs.dagger.compiler
+}

@@ -1,0 +1,20 @@
+### -X 设置请求方法
+### -H 设置请求头
+curl -X GET "http://httpbin.org/get" --trace -H "accept: application/json"
+
+### -A 设置User-Agent
+### -b 设置cookie
+### -d 设置表单请求参数
+curl -X POST "https://httpbin.org/post?freeform=123" -A "vscode-restclient" -b 'foo=bar' -d 'login=admin&password=123456'
+
+###
+curl -X POST "https://httpbin.org/post" -H "Content-Type: application/json" -d '{"name":"aloe1"}'
+
+###
+curl -X PUT "http://httpbin.org/put"
+
+###
+curl -X DELETE "http://httpbin.org/delete"
+
+###
+curl -X PATCH "http://httpbin.org/patch"

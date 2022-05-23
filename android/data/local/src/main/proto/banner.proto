@@ -1,0 +1,13 @@
+syntax = "proto3";
+option java_package = "com.aloe.proto";
+option java_multiple_files = true;
+message Banner {
+  string title = 1;
+  string url = 2;
+  string imagePath = 3;
+  string desc = 4;
+}
+
+message BannerList {
+  repeated Banner banners = 1;
+}
