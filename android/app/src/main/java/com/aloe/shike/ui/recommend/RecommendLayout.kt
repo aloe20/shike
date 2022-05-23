@@ -1,11 +1,15 @@
 package com.aloe.shike.ui.recommend
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,41 +22,66 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun RecommendLayout(bean: List<BannerBean>) {
-  val pagerState = rememberPagerState()
+  val index = remember { mutableStateOf(Int.MAX_VALUE.shr(1)) }
+  val pagerState = rememberPagerState(index.value)
   val nav = LocalNavController.current
   Column(modifier = Modifier.fillMaxHeight()) {
-    Box {
-      HorizontalPager(count = bean.size, modifier = Modifier.height(200.dp), state = pagerState) { index ->
-        Box {
-          Image(
-            painter = rememberAsyncImagePainter(model = bean[index].imagePath),
-            contentDescription = null,
-            modifier = Modifier
-              .fillMaxSize()
-              .clickable {
-                nav.navigate(routerWebPrefix + bean[index].url) {}
-              }
-          )
-          Text(
-            text = bean[index].title ?: "",
-            modifier = Modifier
-              .fillMaxWidth()
-              .background(Color(0x33FFFFFF))
-              .align(Alignment.BottomStart)
-              .padding(start = 8.dp, bottom = 8.dp)
-          )
+    if (bean.isNotEmpty()) {
+      val indicatorState = rememberPagerState(0)
+      Box {
+        HorizontalPager(
+          count = Int.MAX_VALUE,
+          modifier = Modifier.height(200.dp),
+          state = pagerState,
+          userScrollEnabled = false
+        ) { index ->
+          Box {
+            Image(
+              painter = rememberAsyncImagePainter(model = bean[index % bean.size].imagePath),
+              contentDescription = null,
+              modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                  nav.navigate(routerWebPrefix + bean[index % bean.size].url) {}
+                }
+            )
+            Text(
+              text = bean[index % bean.size].title ?: "",
+              modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0x33FFFFFF))
+                .align(Alignment.BottomStart)
+                .padding(start = 8.dp, bottom = 8.dp)
+            )
+          }
         }
+        HorizontalPager(
+          count = bean.size, modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = 8.dp, bottom = 8.dp), state = indicatorState,
+          userScrollEnabled = false
+        ) {}
+        HorizontalPagerIndicator(
+          pagerState = indicatorState,
+          modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = 8.dp, bottom = 8.dp)
+        )
       }
-      HorizontalPagerIndicator(
-        pagerState = pagerState,
-        modifier = Modifier
-          .align(Alignment.BottomEnd)
-          .padding(end = 8.dp, bottom = 8.dp)
-      )
+      rememberCoroutineScope().launch {
+        indicatorState.scrollToPage(if (indicatorState.pageCount == 0) 0 else pagerState.currentPage % indicatorState.pageCount)
+        delay(3000)
+        index.value = pagerState.currentPage + 1
+        pagerState.animateScrollToPage(index.value)
+        indicatorState.scrollToPage(if (indicatorState.pageCount == 0) 0 else pagerState.currentPage % indicatorState.pageCount)
+      }
     }
   }
 }

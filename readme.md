@@ -8,4 +8,4 @@
 - **static**: Koa服务器静态资源
 - **vite**: Vite构建Vue网页
 - **api.http**: curl测试服务器
-- **server**: Koa服务器
+- **server.js**: Koa服务器
