@@ -1,0 +1,65 @@
+{
+ "app": {
+  "bundleName": "com.aloe.hm",
+  "vendor": "aloe",
+  "version": {
+   "code": 1000000,
+   "name": "1.0.0"
+  }
+ },
+ "deviceConfig": {},
+ "module": {
+  "package": "com.aloe.hm",
+  "name": ".MyApplication",
+  "mainAbility": "com.aloe.hm.MainAbility",
+  "deviceType": [
+   "phone",
+   "tablet",
+   "car"
+  ],
+  "distro": {
+   "deliveryWithInstall": true,
+   "moduleName": "entry",
+   "moduleType": "entry",
+   "installationFree": false
+  },
+  "abilities": [
+   {
+    "skills": [
+     {
+      "entities": [
+       "entity.system.home"
+      ],
+      "actions": [
+       "action.system.home"
+      ]
+     }
+    ],
+    "visible": true,
+    "name": "com.aloe.hm.MainAbility",
+    "icon": "$media:icon",
+    "description": "$string:mainability_description",
+    "label": "$string:entry_MainAbility",
+    "type": "page",
+    "launchType": "standard"
+   }
+  ],
+  "js": [
+   {
+    "mode": {
+     "syntax": "ets",
+     "type": "pageAbility"
+    },
+    "pages": [
+     "pages/index",
+     "pages/details"
+    ],
+    "name": "default",
+    "window": {
+     "designWidth": 720,
+     "autoDesignWidth": false
+    }
+   }
+  ]
+ }
+}
