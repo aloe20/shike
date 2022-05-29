@@ -11,8 +11,8 @@ buildscript {
   }
 }
 plugins {
-  id 'com.android.application' version '7.2.0' apply false
-  id 'com.android.library' version '7.2.0' apply false
+  id 'com.android.application' version '7.2.1' apply false
+  id 'com.android.library' version '7.2.1' apply false
   id('org.jetbrains.kotlin.android').version(libs.versions.kotlin).apply(false)
   id('org.jetbrains.kotlin.kapt').version(libs.versions.kotlin).apply(false)
   id('org.jlleitschuh.gradle.ktlint').version(libs.versions.ktlint)
@@ -71,10 +71,12 @@ subprojects {
             it.useVersion('1.2.0')
             break
           case 'androidx.compose.foundation':
+          case 'androidx.compose.animation':
+          case 'androidx.compose.runtime':
             it.useVersion(libs.versions.compose.get())
             break
           case 'androidx.core':
-            it.useVersion('1.7.0')
+            it.useVersion(libs.versions.core.get())
             break
           case 'androidx.customview':
             if (it.requested.name=='customview') {
@@ -85,7 +87,7 @@ subprojects {
             it.useVersion('1.1.1')
             break
           case 'androidx.fragment':
-            it.useVersion('1.4.1')
+            it.useVersion('1.5.0-rc01')
             break
           case 'androidx.lifecycle':
             it.useVersion(libs.versions.lifecycle.get())
@@ -96,7 +98,7 @@ subprojects {
             }
             break
           case 'androidx.savedstate':
-            it.useVersion('1.1.0')
+            it.useVersion('1.2.0-rc01')
             break
           case 'androidx.startup':
             it.useVersion('1.1.1')

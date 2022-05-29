@@ -1,21 +1,17 @@
 package com.aloe.shike.ui.main
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.os.Process
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.metrics.performance.PerformanceMetricsState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,10 +22,12 @@ import com.aloe.flu.paddingStatus
 import com.aloe.rn.ReactLayout
 import com.aloe.shike.app.AppTheme
 import com.aloe.shike.app.Purple500
+import com.aloe.shike.app.showToast
 import com.aloe.shike.ui.excel.ExcelLayout
 import com.aloe.shike.ui.rich.PdfContentView
 import com.aloe.web.WebLayout
 import com.aloe.web.routerWebPrefix
+import com.aloe.zxing.ScanLayout
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -87,44 +85,22 @@ class MainActivity : ComponentActivity() {
                             composable("list") {
                                 ExcelLayout { navController.navigateUp() }
                             }
+                            composable("scan") {
+                                ScanLayout {
+                                    if (it.isNotEmpty()) {
+                                        showToast(it)
+                                    }
+                                    try {
+                                        navController.navigateUp()
+                                    } catch (e: IllegalStateException) {
+                                        e.printStackTrace()
+                                    }
+                                }
+                            }
                         }
-                    }
-                    PrivacyDialog(visible = state.privacyVisible) {
-                        viewModel.hidePrivacy()
                     }
                 }
             }
         }
-    }
-
-    override fun setContentView(view: View, params: ViewGroup.LayoutParams?) {
-        super.setContentView(view, params)
-        val stateHolder = PerformanceMetricsState.getForHierarchy(view)
-        stateHolder.state?.addState("Activity", javaClass.simpleName)
-    }
-}
-
-@SuppressLint("UnrememberedMutableState")
-@Composable
-fun PrivacyDialog(visible: Boolean, confirm: () -> Unit) {
-    var showState by mutableStateOf(visible)
-    if (showState) {
-        AlertDialog(
-            onDismissRequest = { },
-            confirmButton = {
-                TextButton(onClick = {
-                    showState = false
-                    confirm.invoke()
-                }) { Text(text = "同意") }
-            },
-            dismissButton = {
-                TextButton(onClick = {
-                    showState = false
-                    Process.killProcess(Process.myPid())
-                }) { Text(text = "不同意") }
-            },
-            title = { Text(text = "隐私协议") },
-            text = { Text(text = "是否同意隐私协议") }
-        )
     }
 }

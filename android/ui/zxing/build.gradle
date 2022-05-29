@@ -1,8 +1,8 @@
 plugins {
-  id 'com.android.library'
-  id 'org.jetbrains.kotlin.android'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
-apply from: file("../../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
 android {
   compileSdk libs.versions.sdk.compile.get().toInteger()
   buildToolsVersion libs.versions.tools.get()
@@ -31,13 +31,16 @@ android {
   composeOptions {
     kotlinCompilerExtensionVersion libs.versions.compose.get()
   }
-  namespace 'com.aloe.rn'
+  namespace 'com.aloe.zxing'
 }
 
 dependencies {
+  api libs.jetpack.camera.camera2
+  api libs.jetpack.camera.lifecycle
+  api libs.jetpack.camera.view
   api libs.jetpack.compose.material
-  api(libs.coroutines.core)
-  api(libs.jetpack.lifecycle)
-  implementation libs.rn
-  implementation libs.jsc
+  api libs.jetpack.core
+  api libs.jetpack.lifecycle
+  api libs.accompanist.permissions
+  implementation libs.zxing
 }

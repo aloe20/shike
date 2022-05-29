@@ -9,6 +9,8 @@
 .sconsign.dblite
 .svn/
 
+migrate_working_dir/
+
 *.swp
 profile
 
@@ -34,7 +36,7 @@ xcuserdata
 *sync/
 Icon?
 .tags*
-*.iml
+
 build/
 .android/
 .ios/

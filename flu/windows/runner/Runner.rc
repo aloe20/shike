@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.aloe" "\0"
-            VALUE "FileDescription", "flu" "\0"
+            VALUE "FileDescription", "flu02" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flu" "\0"
+            VALUE "InternalName", "flu02" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.aloe. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flu.exe" "\0"
-            VALUE "ProductName", "flu" "\0"
+            VALUE "OriginalFilename", "flu02.exe" "\0"
+            VALUE "ProductName", "flu02" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

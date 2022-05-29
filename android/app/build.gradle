@@ -152,12 +152,11 @@ dependencies {
   implementation project(path: ':ui:flu')
   implementation project(path: ':ui:rn')
   implementation project(path: ':ui:web')
+  implementation project(path: ':ui:zxing')
   implementation project(path: ':data:http')
   implementation project(path: ':data:local')
   implementation project(path: ':data:socket')
   implementation libs.jetpack.activity
-  implementation libs.jetpack.appcompat
-  implementation libs.jetpack.metrics
   implementation libs.jetpack.hilt.compose
   implementation libs.accompanist.systemuicontroller
   implementation libs.accompanist.insets
