@@ -41,6 +41,5 @@ dependencies {
   api libs.jetpack.compose.material
   api libs.jetpack.core
   api libs.jetpack.lifecycle
-  api libs.accompanist.permissions
   implementation libs.zxing
 }

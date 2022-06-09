@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,6 +31,8 @@ import com.aloe.web.routerWebPrefix
 import com.aloe.zxing.ScanLayout
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 val LocalNavController = compositionLocalOf<NavHostController> { error("") }
 
@@ -78,9 +81,7 @@ class MainActivity : ComponentActivity() {
                                 WebLayout("http://192.168.1.4:3000/vue") { navController.navigateUp() }
                             }
                             composable("rn") {
-                                ReactLayout {
-                                    navController.navigateUp()
-                                }
+                                ReactLayout { navController.navigateUp() }
                             }
                             composable("list") {
                                 ExcelLayout { navController.navigateUp() }
@@ -90,11 +91,7 @@ class MainActivity : ComponentActivity() {
                                     if (it.isNotEmpty()) {
                                         showToast(it)
                                     }
-                                    try {
-                                        navController.navigateUp()
-                                    } catch (e: IllegalStateException) {
-                                        e.printStackTrace()
-                                    }
+                                    lifecycleScope.launch(Dispatchers.Main) { navController.navigateUp() }
                                 }
                             }
                         }

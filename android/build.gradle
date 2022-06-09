@@ -65,7 +65,7 @@ subprojects {
             it.useVersion(libs.versions.annotation.get())
             break
           case 'androidx.appcompat':
-            it.useVersion('1.4.1')
+            it.useVersion('1.4.2')
             break
           case 'androidx.collection':
             it.useVersion('1.2.0')

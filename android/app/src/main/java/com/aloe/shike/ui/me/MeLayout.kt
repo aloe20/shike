@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.LocalActivityResultRegistryOwner
@@ -28,14 +29,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.contentValuesOf
 import coil.compose.rememberAsyncImagePainter
 import com.aloe.shike.BuildConfig
-import com.aloe.shike.R
 import com.aloe.shike.app.showToast
 import com.aloe.shike.ktx.log
 import com.aloe.zxing.createQrCode
 import com.aloe.zxing.decodeQrCode
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -117,4 +120,19 @@ fun saveImg(context: Context, uri: Uri) {
     val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri))
     val image = MediaStore.Images.Media.insertImage(resolver, bitmap, "head", "aaa")
     image.log()
+    /*val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+    val values = contentValuesOf(
+        MediaStore.MediaColumns.DISPLAY_NAME to "app_$time", MediaStore.Images.Media.MIME_TYPE to "image/jpeg"
+    )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        values.putAll(
+            contentValuesOf(
+                MediaStore.MediaColumns.RELATIVE_PATH to Environment.DIRECTORY_DCIM,
+                MediaStore.MediaColumns.IS_PENDING to true
+            )
+        )
+    }
+    context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)?.also {
+            val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri))
+        }*/
 }
