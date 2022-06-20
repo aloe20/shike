@@ -61,7 +61,7 @@ internal class ClientUdp @Inject constructor() {
             strap.group(group).channel(NioDatagramChannel::class.java)
                 .option(ChannelOption.SO_BROADCAST, true)
                 .handler(object : SimpleChannelInboundHandler<DatagramPacket>() {
-                    override fun channelActive(ctx: ChannelHandlerContext?) {
+                    override fun channelActive(ctx: ChannelHandlerContext) {
                         super.channelActive(ctx)
                         context = ctx
                         println("UDP(${getIp()}:$localPort)通道已建立")

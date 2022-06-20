@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.aloe.shike.common
 
 import android.annotation.SuppressLint
@@ -17,7 +19,7 @@ import javax.crypto.spec.SecretKeySpec
  * byte数组转十六进制字符串.
  * @return 十六进制字符串
  */
-fun ByteArray.toHexString(): String = StringBuilder().run {
+fun toHexString(): String = StringBuilder().run {
     forEach { append(String.format("%02X", it)) }
     toString()
 }

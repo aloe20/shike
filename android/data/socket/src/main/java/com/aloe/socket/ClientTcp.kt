@@ -27,7 +27,7 @@ internal class ClientTcp {
                                 println("连接服务器${address.hostName}:${address.port}成功")
                             }
 
-                            override fun channelRead(ctx: ChannelHandlerContext, msg: Any?) {
+                            override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
                                 super.channelRead(ctx, msg)
                                 val address = ctx.channel().remoteAddress() as InetSocketAddress
                                 println("收到服务器(${address.hostName}:${address.port})数据:$msg")

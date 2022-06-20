@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.util.DisplayMetrics
 import android.util.Size
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -55,7 +54,7 @@ fun PreviewView.bindCamera(result: (String) -> Unit) {
             cameraExecutor.shutdown()
         }
     }
-    val metrics = DisplayMetrics().also { display.getRealMetrics(it) }
+    val metrics = context.resources.displayMetrics
     //获取使用的屏幕比例分辨率属性
     val previewRatio = max(metrics.widthPixels / 2, metrics.heightPixels / 2).toDouble() / min(
         metrics.widthPixels / 2,
@@ -77,7 +76,7 @@ fun PreviewView.bindCamera(result: (String) -> Unit) {
         val preview = Preview.Builder().setTargetResolution(size).setTargetRotation(rotation).build()
         // 必须在重新绑定用例之前取消之前绑定
         cameraProvider.unbindAll()
-        try {
+        runCatching {
             //获取相机实例
             cameraProvider.bindToLifecycle(owner, cameraSelector, preview,
                 ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
@@ -89,8 +88,6 @@ fun PreviewView.bindCamera(result: (String) -> Unit) {
                     })
             //设置预览的view
             preview.setSurfaceProvider(surfaceProvider)
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }, ContextCompat.getMainExecutor(context))
 }
@@ -106,12 +103,7 @@ fun decodeQrCode(context: Context, uri: Uri): String? {
         val pixels = IntArray(it.width * it.height)
         it.getPixels(pixels, 0, it.width, 0, 0, it.width, it.height)
         val binaryBitmap = BinaryBitmap(HybridBinarizer(RGBLuminanceSource(it.width, it.height, pixels)))
-        try {
-            QRCodeReader().decode(binaryBitmap, mutableMapOf(DecodeHintType.CHARACTER_SET to "UTF-8")).text
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        runCatching { QRCodeReader().decode(binaryBitmap, mutableMapOf(DecodeHintType.CHARACTER_SET to "UTF-8")).text }.getOrNull()
     }
 }
 

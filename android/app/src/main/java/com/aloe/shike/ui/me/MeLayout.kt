@@ -1,13 +1,17 @@
 package com.aloe.shike.ui.me
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,10 +19,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -33,7 +34,6 @@ import androidx.core.content.contentValuesOf
 import coil.compose.rememberAsyncImagePainter
 import com.aloe.shike.BuildConfig
 import com.aloe.shike.app.showToast
-import com.aloe.shike.ktx.log
 import com.aloe.zxing.createQrCode
 import com.aloe.zxing.decodeQrCode
 import java.io.File
@@ -47,26 +47,38 @@ fun MeLayout() {
     val context = LocalContext.current
     val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "head.jpg")
     val cameraUri = FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", file)
-    val imgUri =
-        remember { mutableStateOf(Uri.parse("android.resource://${BuildConfig.APPLICATION_ID}/drawable/ic_person")) }
+    var imgUri by remember { mutableStateOf(Uri.parse("android.resource://${BuildConfig.APPLICATION_ID}/drawable/ic_person")) }
     val drawerState = rememberBottomDrawerState(BottomDrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val registry = LocalActivityResultRegistryOwner.current?.activityResultRegistry
+    var isValid by remember { mutableStateOf(false) }
     val launcher = registry?.register(
-        "camera", ActivityResultContracts.TakePicture()
+        "camera1", ActivityResultContracts.TakePicture()
     ) {
         scope.launch { drawerState.close() }
         if (it) {
-            imgUri.value = cameraUri
-            saveImg(context, cameraUri)
+            imgUri = saveImg(context, cameraUri)
         }
     }
     val launcher2 = registry?.register("album", ActivityResultContracts.StartActivityForResult()) {
         scope.launch { drawerState.close() }
         it.data?.data?.also { uri ->
-            imgUri.value = uri
+            imgUri = uri
             val code = decodeQrCode(context, uri)
             context.showToast(code ?: "没有识别到二维码")
+        }
+    }
+    val launcher3: ActivityResultLauncher<String>? = LocalActivityResultRegistryOwner.current?.activityResultRegistry?.register(
+        "me_permission",
+        ActivityResultContracts.RequestPermission()
+    ) { hasPermission ->
+        if (isValid) {
+            if (hasPermission) {
+                launcher?.launch(cameraUri)
+            } else {
+                context.showToast("没有相机权限")
+            }
+            isValid = false
         }
     }
     BottomDrawer(drawerContent = {
@@ -74,7 +86,8 @@ fun MeLayout() {
             text = "拍照", modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    launcher?.launch(cameraUri)
+                    isValid = true
+                    launcher3?.launch(Manifest.permission.CAMERA)
                 }
                 .padding(vertical = 8.dp), textAlign = TextAlign.Center
         )
@@ -95,7 +108,7 @@ fun MeLayout() {
     }, drawerState = drawerState) {
         Column(modifier = Modifier.fillMaxHeight()) {
             Image(
-                painter = rememberAsyncImagePainter(model = imgUri.value),
+                painter = rememberAsyncImagePainter(model = imgUri),
                 contentDescription = "",
                 modifier = Modifier
                     .width(200.dp)
@@ -108,31 +121,40 @@ fun MeLayout() {
 
             val logo = ContextCompat.getDrawable(context, context.applicationInfo.icon)
             Image(
-                painter = BitmapPainter(image = createQrCode(800, 800, "aaaaaaaaaaaaaa", logo).asImageBitmap()),
+                painter = BitmapPainter(image = createQrCode(800, 800, "picture", logo).asImageBitmap()),
                 contentDescription = ""
             )
         }
     }
 }
 
-fun saveImg(context: Context, uri: Uri) {
-    val resolver = context.contentResolver
-    val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri))
-    val image = MediaStore.Images.Media.insertImage(resolver, bitmap, "head", "aaa")
-    image.log()
-    /*val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
+fun saveImg(context: Context, uri: Uri): Uri? {
+    val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
     val values = contentValuesOf(
-        MediaStore.MediaColumns.DISPLAY_NAME to "app_$time", MediaStore.Images.Media.MIME_TYPE to "image/jpeg"
+        MediaStore.MediaColumns.DISPLAY_NAME to "app_$time",
+        MediaStore.Images.Media.MIME_TYPE to "image/jpeg"
     )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         values.putAll(
             contentValuesOf(
-                MediaStore.MediaColumns.RELATIVE_PATH to Environment.DIRECTORY_DCIM,
+                MediaStore.MediaColumns.RELATIVE_PATH to Environment.DIRECTORY_PICTURES,
                 MediaStore.MediaColumns.IS_PENDING to true
             )
         )
     }
-    context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)?.also {
-            val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri))
-        }*/
+    return with(context.contentResolver) {
+        insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)?.let {
+            Pair(it, openOutputStream(it))
+        }?.let {
+            BitmapFactory.decodeStream(openInputStream(uri))?.compress(Bitmap.CompressFormat.JPEG, 100, it.second)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                update(it.first, values.apply {
+                    clear()
+                    put(MediaStore.MediaColumns.IS_PENDING, false)
+                }, null, null)
+            }
+            MediaScannerConnection.scanFile(context, arrayOf(it.first.toString()), arrayOf("image/jpeg"), null)
+            it.first
+        }
+    }
 }

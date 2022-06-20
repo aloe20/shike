@@ -1,6 +1,5 @@
 package com.aloe.shike.ui.rich
 
-import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
@@ -17,12 +16,11 @@ import kotlinx.coroutines.flow.Flow
 
 @HiltViewModel
 class RichVm @Inject constructor(
-    private val app: Application,
     private val repository: Repository
 ) : BaseVm() {
     fun loadPdf(url: String): LiveData<WorkInfo> = repository.download(url)
 
-    fun getPdfPage(filePath:String): Flow<PagingData<Bitmap>> {
+    fun getPdfPage(filePath: String): Flow<PagingData<Bitmap>> {
         return Pager(PagingConfig(3, 1, true, 3)) {
             PdfPagingSource(PdfRenderer(ParcelFileDescriptor.open(File(filePath), ParcelFileDescriptor.MODE_READ_ONLY)))
         }.flow
@@ -33,7 +31,7 @@ class RichVm @Inject constructor(
             override fun getRefreshKey(state: PagingState<Int, Bitmap>): Int = 0
 
             override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Bitmap> {
-                return try {
+                return runCatching {
                     val list = mutableListOf<Bitmap>()
                     val start = (params.key ?: -1) + 1
                     val end = start + params.loadSize
@@ -46,9 +44,7 @@ class RichVm @Inject constructor(
                         list.add(bitmap)
                     }
                     LoadResult.Page(list, null, end)
-                } catch (e: Exception) {
-                    LoadResult.Error(e)
-                }
+                }.getOrElse { LoadResult.Error(it) }
             }
         }
     }

@@ -119,7 +119,7 @@ subprojects {
             break
           case 'com.squareup.okhttp3':
             //https://github.com/square/okhttp
-            it.useVersion('4.9.3')
+            it.useVersion('4.10.0')
             break
         }
       }

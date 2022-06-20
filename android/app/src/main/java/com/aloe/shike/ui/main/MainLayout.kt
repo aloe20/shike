@@ -82,7 +82,7 @@ fun MainLayout(bean: List<BannerBean>) {
             }
         }
         val launcher: ActivityResultLauncher<String>? = LocalActivityResultRegistryOwner.current?.activityResultRegistry?.register(
-            "camera",
+            "main_permission",
             ActivityResultContracts.RequestPermission()
         ) { hasPermission ->
             if (isValid) {

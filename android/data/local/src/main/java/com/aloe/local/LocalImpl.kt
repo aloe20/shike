@@ -20,8 +20,8 @@ internal class LocalImpl @Inject constructor(@ApplicationContext val ctx: Contex
     private val settingsDataStore: DataStore<Preferences> =
         preferencesDataStore(name = "settings").getValue(ctx, Preferences::javaClass)
 
-    override suspend fun getAssetsStr(name: String): String {
-        return ctx.assets.open("quotes.json").source().buffer().readUtf8()
+    override suspend fun getAssetsStr(name: String): String? {
+        return runCatching { ctx.assets.open("quotes.json").source().buffer().readUtf8() }.getOrNull()
     }
 
     override suspend fun putPrivacyVisible(isVisible: Boolean) {
@@ -35,10 +35,10 @@ internal class LocalImpl @Inject constructor(@ApplicationContext val ctx: Contex
     }
 
     override suspend fun putBanner(banner: List<Banner>) {
-        ctx.bannerDataStore.updateData { it.toBuilder().addAllBanners(banner).build() }
+        ctx.bannerDataStore.updateData { it?.toBuilder()?.addAllBanners(banner)?.build() }
     }
 
-    override suspend fun getBanner(): Flow<MutableList<Banner>> = ctx.bannerDataStore.data.map { it.bannersList }
+    override suspend fun getBanner(): Flow<MutableList<Banner>?> = ctx.bannerDataStore.data.map { it?.bannersList }
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")

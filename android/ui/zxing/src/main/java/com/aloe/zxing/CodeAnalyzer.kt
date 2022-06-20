@@ -48,16 +48,12 @@ class CodeAnalyzer(private val result: (String) -> Unit) : ImageAnalysis.Analyze
         //zxing核心解码块，因为图片旋转了90度，所以宽高互换，最后一个参数是左右翻转
         val source = PlanarYUVLuminanceSource(rotationData, height, width, 0, 0, height, width, false)
         val bitmap = BinaryBitmap(HybridBinarizer(source))
-        try {
+        image.use {
             val scanResult = reader.decode(bitmap)
             if (text != scanResult.text) {
                 text = scanResult.text
                 result.invoke(scanResult.text)
             }
-        } catch (e: Exception) {
-            image.close()
-        } finally {
-            image.close()
         }
     }
 }

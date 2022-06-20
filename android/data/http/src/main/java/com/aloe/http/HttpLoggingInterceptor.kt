@@ -1,12 +1,13 @@
 package com.aloe.http
 
-import java.io.EOFException
 import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.TimeUnit
-import okhttp3.*
+import okhttp3.Headers
+import okhttp3.Interceptor
+import okhttp3.Response
 import okhttp3.internal.http.promisesBody
 import okhttp3.internal.platform.Platform
 import okio.Buffer
@@ -135,13 +136,7 @@ class HttpLoggingInterceptor @JvmOverloads constructor(
         }
 
         val startNs = System.nanoTime()
-        val response: Response
-        try {
-            response = chain.proceed(request)
-        } catch (e: Exception) {
-            logger.log("<-- HTTP FAILED: $e")
-            throw e
-        }
+        val response: Response = run { chain.proceed(request) }
 
         val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
 
@@ -215,21 +210,20 @@ class HttpLoggingInterceptor @JvmOverloads constructor(
 }
 
 fun Buffer.isProbablyUtf8(): Boolean {
-    try {
+    return runCatching {
         val prefix = Buffer()
         val byteCount = size.coerceAtMost(64)
         copyTo(prefix, 0, byteCount)
+        var result = true
         for (i in 0 until 16) {
             if (prefix.exhausted()) {
                 break
             }
             val codePoint = prefix.readUtf8CodePoint()
             if (Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint)) {
-                return false
+                result = false
             }
         }
-        return true
-    } catch (_: EOFException) {
-        return false // Truncated UTF-8 sequence.
-    }
+        result
+    }.getOrDefault(false)
 }
