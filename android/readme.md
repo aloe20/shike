@@ -4,3 +4,5 @@
 
 1. adb shell
 2. dumpsys window | grep mCurrentFocus
+
+aaaaaaaaa
