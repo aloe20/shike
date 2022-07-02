@@ -18,13 +18,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.github.lzyzsd.jsbridge.BridgeWebView
 
 const val routerWebPrefix = "web?url="
 
 @Composable
 fun WebLayout(url: String = "http://192.168.1.4:3000/vue", click: (() -> Unit)? = null) {
-    val webView = BridgeWebView(LocalContext.current)
+    val webView = AppWebView(LocalContext.current)
+    webView.webChromeClient = object : WebChromeClient() {
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
+            Log.d("js", "${consoleMessage?.message()}")
+            return super.onConsoleMessage(consoleMessage)
+        }
+
+        override fun onJsPrompt(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            defaultValue: String?,
+            result: JsPromptResult
+        ): Boolean {
+            result.confirm()
+            return super.onJsPrompt(view, url, message, defaultValue, result)
+        }
+    }
+    /*with(webView.settings) {
+        domStorageEnabled = true
+        databaseEnabled = true
+        allowFileAccess = true
+        allowContentAccess = true
+    }*/
     Scaffold(topBar = {
         TopAppBar(title = {
             Text(text = "网页", modifier = Modifier.padding(0.dp), fontSize = 16.sp)
@@ -43,23 +65,6 @@ fun WebLayout(url: String = "http://192.168.1.4:3000/vue", click: (() -> Unit)? 
     }, modifier = Modifier.background(Color.Red)) { padding ->
         AndroidView(factory = { webView }, modifier = Modifier.padding(padding)) {
             with(it) {
-                webChromeClient = object : WebChromeClient() {
-                    override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-                        Log.d("js", "${consoleMessage?.message()}")
-                        return super.onConsoleMessage(consoleMessage)
-                    }
-
-                    override fun onJsPrompt(
-                        view: WebView?,
-                        url: String?,
-                        message: String?,
-                        defaultValue: String?,
-                        result: JsPromptResult
-                    ): Boolean {
-                        result.confirm()
-                        return super.onJsPrompt(view, url, message, defaultValue, result)
-                    }
-                }
                 registerHandler("submitFromWeb") { data, block ->
                     Log.d("js", "handler = submitFromWeb, data from web = $data")
                     block.onCallBack("response data from Android")

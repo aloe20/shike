@@ -6,13 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.aloe.bean.BannerBean
@@ -22,8 +20,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalPagerApi::class)
@@ -32,6 +29,7 @@ fun RecommendLayout(bean: List<BannerBean>) {
   val index = remember { mutableStateOf(Int.MAX_VALUE.shr(1)) }
   val pagerState = rememberPagerState(index.value)
   val nav = LocalNavController.current
+  val scope = rememberCoroutineScope()
   Column(modifier = Modifier.fillMaxHeight()) {
     if (bean.isNotEmpty()) {
       val indicatorState = rememberPagerState(0)
@@ -50,7 +48,8 @@ fun RecommendLayout(bean: List<BannerBean>) {
                 .fillMaxSize()
                 .clickable {
                   nav.navigate(routerWebPrefix + bean[index % bean.size].url) {}
-                }
+                },
+              contentScale = ContentScale.Crop
             )
             Text(
               text = bean[index % bean.size].title ?: "",
@@ -75,7 +74,7 @@ fun RecommendLayout(bean: List<BannerBean>) {
             .padding(end = 8.dp, bottom = 8.dp)
         )
       }
-      rememberCoroutineScope().launch {
+      scope.launch {
         indicatorState.scrollToPage(if (indicatorState.pageCount == 0) 0 else pagerState.currentPage % indicatorState.pageCount)
         delay(3000)
         index.value = pagerState.currentPage + 1

@@ -1,15 +1,9 @@
 package com.aloe.shike.ui.me
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,15 +24,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.content.contentValuesOf
 import coil.compose.rememberAsyncImagePainter
 import com.aloe.shike.BuildConfig
+import com.aloe.shike.app.AppObserver
 import com.aloe.shike.app.showToast
 import com.aloe.zxing.createQrCode
 import com.aloe.zxing.decodeQrCode
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -57,7 +49,7 @@ fun MeLayout() {
     ) {
         scope.launch { drawerState.close() }
         if (it) {
-            imgUri = saveImg(context, cameraUri)
+            imgUri = AppObserver.saveImg(context, cameraUri)
         }
     }
     val launcher2 = registry?.register("album", ActivityResultContracts.StartActivityForResult()) {
@@ -124,37 +116,6 @@ fun MeLayout() {
                 painter = BitmapPainter(image = createQrCode(800, 800, "picture", logo).asImageBitmap()),
                 contentDescription = ""
             )
-        }
-    }
-}
-
-fun saveImg(context: Context, uri: Uri): Uri? {
-    val time = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
-    val values = contentValuesOf(
-        MediaStore.MediaColumns.DISPLAY_NAME to "app_$time",
-        MediaStore.Images.Media.MIME_TYPE to "image/jpeg"
-    )
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        values.putAll(
-            contentValuesOf(
-                MediaStore.MediaColumns.RELATIVE_PATH to Environment.DIRECTORY_PICTURES,
-                MediaStore.MediaColumns.IS_PENDING to true
-            )
-        )
-    }
-    return with(context.contentResolver) {
-        insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)?.let {
-            Pair(it, openOutputStream(it))
-        }?.let {
-            BitmapFactory.decodeStream(openInputStream(uri))?.compress(Bitmap.CompressFormat.JPEG, 100, it.second)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                update(it.first, values.apply {
-                    clear()
-                    put(MediaStore.MediaColumns.IS_PENDING, false)
-                }, null, null)
-            }
-            MediaScannerConnection.scanFile(context, arrayOf(it.first.toString()), arrayOf("image/jpeg"), null)
-            it.first
         }
     }
 }

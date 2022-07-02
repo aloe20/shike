@@ -1,5 +1,6 @@
 <template>
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
+    <img alt="Vue logo" :src="url" class="width:100%;height:80%" />
     <div class="content">{{ msg }}</div>
     <input type="button" value="调用Native方法" @click="testClick" />
 </template>
@@ -8,7 +9,8 @@ export default {
     name: 'App',
     data() {
         return {
-            msg: 'Hello Vue'
+            msg: 'Hello Vue',
+            url: 'http://localhost/image?resource=/storage/emulated/0/Pictures/IMG_20220622_053318.jpg'
         }
     },
     mounted() {

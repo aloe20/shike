@@ -41,15 +41,15 @@ dependencyResolutionManagement {
       version('lifecycle', '2.5.0-rc02')
       version('flutter', '1.0')
       version('dagger', '2.42')
-      version('accompanist', '0.24.11-rc')
+      version('accompanist', '0.24.12-rc')
       version('protobuf', '3.21.1')
       version('moshi', '1.13.0')
       version('kotlin', '1.6.21')
       version('coroutines', '1.6.3')
       version('ktlint', '10.3.0')
       version('detekt', '1.20.0')
-      version('sdk_compile', '33')
-      version('sdk_target', '33')
+      version('sdk_compile', '32')
+      version('sdk_target', '32')
       version('sdk_min', '23')
       version('tools', '33.0.0')
       version('okio', '3.1.0')
@@ -59,6 +59,7 @@ dependencyResolutionManagement {
       //https://github.com/Kotlin/kotlinx.coroutines
       alias('coroutines-core').to('org.jetbrains.kotlinx', 'kotlinx-coroutines-core-jvm').versionRef('coroutines')
       //https://maven.google.com/web/index.html
+      //https://developer.android.google.cn/jetpack/androidx/versions
       alias('jetpack-activity').to('androidx.activity', 'activity-compose').versionRef('activity')
       alias('jetpack-camera-camera2').to('androidx.camera', 'camera-camera2').versionRef('camera')
       alias('jetpack-camera-lifecycle').to('androidx.camera', 'camera-lifecycle').versionRef('camera')
@@ -108,7 +109,7 @@ dependencyResolutionManagement {
       //https://github.com/lzyzsd/JsBridge
       alias('jsbridge').to('com.github.lzyzsd:jsbridge:1.0.4')
       //https://github.com/facebook/react-native
-      alias('rn').to('com.facebook.react:react-native:0.68.2')
+      alias('rn').to('com.facebook.react:react-native:0.69.0')
       alias('jsc').to('org.webkit:android-jsc:r250230')
       //https://github.com/JLLeitschuh/ktlint-gradle
       alias('quality-ktlint-gradle').to('org.jlleitschuh.gradle', 'ktlint-gradle').versionRef('ktlint')
