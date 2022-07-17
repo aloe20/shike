@@ -1,85 +1,42 @@
-import io.gitlab.arturbosch.detekt.Detekt
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
   repositories {
     google()
-    mavenCentral()
   }
   dependencies {
-    classpath libs.dagger.gradle
+    classpath('com.google.dagger:hilt-android-gradle-plugin:2.42')
   }
 }
 plugins {
   id 'com.android.application' version '7.2.1' apply false
   id 'com.android.library' version '7.2.1' apply false
-  id('org.jetbrains.kotlin.android').version(libs.versions.kotlin).apply(false)
-  id('org.jetbrains.kotlin.kapt').version(libs.versions.kotlin).apply(false)
-  id('org.jlleitschuh.gradle.ktlint').version(libs.versions.ktlint)
-  id ('io.gitlab.arturbosch.detekt').version(libs.versions.detekt)
+  id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
 }
 subprojects {
-  apply plugin: 'org.jlleitschuh.gradle.ktlint'
-  apply plugin: 'io.gitlab.arturbosch.detekt'
-  tasks.detekt.jvmTarget = '11'
-  ktlint {
-    version = '0.45.2'
-    debug = true
-    verbose = true
-    android = true
-    outputToConsole = true
-    outputColorName = "RED"
-    ignoreFailures = false
-    enableExperimentalRules = true
-    additionalEditorconfigFile = file(".editorconfig")
-    disabledRules = ["import-ordering", "no-wildcard-imports"]
-    //baseline = file("my-project-ktlint-baseline.xml")
-    reporters {
-      reporter "checkstyle"
-    }
-    kotlinScriptAdditionalPaths {
-      include fileTree("scripts/")
-    }
-    filter {
-      exclude("**/generated/**")
-      include("**/kotlin/**")
-    }
-  }
-  detekt {
-    toolVersion = libs.versions.detekt.get()
-    autoCorrect = false
-    ignoreFailures = false
-    config = files("$rootDir/config/detekt/detekt.yml")
-  }
-  tasks.withType(Detekt).configureEach {
-    reports { sarif.enabled = false }
-  }
   configurations.all {
     it.resolutionStrategy {
       eachDependency {
         switch (it.requested.group) {
           case 'androidx.activity':
-            it.useVersion(libs.versions.activity.get())
+            //it.useVersion('1.5.+')
             break
           case 'androidx.annotation':
-            it.useVersion(libs.versions.annotation.get())
+            it.useVersion('1.2.0')
             break
           case 'androidx.appcompat':
             it.useVersion('1.4.2')
             break
-          case 'androidx.collection':
-            it.useVersion('1.2.0')
-            break
-          case 'androidx.compose.foundation':
           case 'androidx.compose.animation':
-          case 'androidx.compose.runtime':
-            it.useVersion(libs.versions.compose.get())
+          case 'androidx.compose.foundation':
+          case 'androidx.compose.material':
+          case 'androidx.compose.ui':
+            it.useVersion('1.2.0-rc03')
             break
           case 'androidx.core':
-            it.useVersion(libs.versions.core.get())
+            it.useVersion('1.8.0')
             break
           case 'androidx.customview':
-            if (it.requested.name=='customview') {
+            if (it.requested.name == 'customview') {
               it.useVersion('1.1.0')
             }
             break
@@ -87,46 +44,37 @@ subprojects {
             it.useVersion('1.1.1')
             break
           case 'androidx.fragment':
-            it.useVersion('1.5.0-rc01')
+            it.useVersion('1.5.0')
             break
           case 'androidx.lifecycle':
-            it.useVersion(libs.versions.lifecycle.get())
+            it.useVersion('2.5.0')
             break
-          case 'androidx.paging':
-            if (it.requested.name != 'paging-compose') {
-              it.useVersion('3.1.1')
-            }
+          case 'androidx.recyclerview':
+            it.useVersion('1.2.1')
             break
-          case 'androidx.savedstate':
-            it.useVersion('1.2.0-rc01')
-            break
-          case 'androidx.startup':
-            it.useVersion('1.1.1')
-            break
-          case 'androidx.window':
-            it.useVersion('1.0.0')
-            break
-          case 'org.jetbrains.kotlin':
-            it.useVersion(libs.versions.kotlin.get())
-            break
-          case 'org.jetbrains.kotlinx':
-            if (it.requested.name.startsWith('kotlinx-coroutines')) {
-              it.useVersion(libs.versions.coroutines.get())
-            }
+          case 'com.google.android.material':
+            it.useVersion('1.6.1')
             break
           case 'com.squareup.okio':
-            it.useVersion(libs.versions.okio.get())
+            it.useVersion('3.1.0')
             break
           case 'com.squareup.okhttp3':
             //https://github.com/square/okhttp
             it.useVersion('4.10.0')
+            break
+          case 'org.jetbrains.kotlin':
+            it.useVersion('1.7.0')
+            break
+          case 'org.jetbrains.kotlinx':
+            if (it.requested.name != 'kotlinx-metadata-jvm') {
+              it.useVersion('1.6.1')
+            }
             break
         }
       }
     }
   }
 }
-
 task clean(type: Delete) {
   delete rootProject.buildDir
 }

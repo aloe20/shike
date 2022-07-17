@@ -1,6 +1,6 @@
 <template>
-    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-    <img alt="Vue logo" :src="url" class="width:100%;height:80%" />
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <!-- <img alt="Vue logo" :src="url" class="width:100%;height:100%" /> -->
     <div class="content">{{ msg }}</div>
     <input type="button" value="调用Native方法" @click="testClick" />
 </template>
@@ -10,7 +10,7 @@ export default {
     data() {
         return {
             msg: 'Hello Vue',
-            url: 'http://localhost/image?resource=/storage/emulated/0/Pictures/IMG_20220622_053318.jpg'
+            url: 'http://localhost/image?resource=/storage/emulated/0/Pictures/img.jpg'
         }
     },
     mounted() {

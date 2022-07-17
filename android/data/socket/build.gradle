@@ -1,17 +1,17 @@
 plugins {
-  id 'com.android.library'
-  id 'org.jetbrains.kotlin.android'
-  id 'org.jetbrains.kotlin.kapt'
-  id 'dagger.hilt.android.plugin'
+  id('com.android.library')
+  id('org.jetbrains.kotlin.android')
+  id('org.jetbrains.kotlin.kapt')
+  id('dagger.hilt.android.plugin')
 }
 
 android {
-  compileSdk libs.versions.sdk.compile.get().toInteger()
-  buildToolsVersion libs.versions.tools.get()
+  compileSdk 32
+  buildToolsVersion '33.0.0'
   defaultConfig {
-    minSdk libs.versions.sdk.min.get().toInteger()
-    targetSdk libs.versions.sdk.target.get().toInteger()
-      consumerProguardFiles "consumer-rules.pro"
+    minSdk 24
+    targetSdk 32
+    consumerProguardFiles "consumer-rules.pro"
   }
 
   buildTypes {
@@ -27,15 +27,13 @@ android {
   kotlinOptions {
     jvmTarget = '11'
   }
-    namespace 'com.aloe.socket'
 }
 
 dependencies {
-  api libs.jetpack.work
-  api libs.jetpack.hilt.work
-  kapt libs.jetpack.hilt.compiler
-  implementation libs.netty
-  implementation libs.coroutines.core
-  implementation libs.dagger.android
-  kapt libs.dagger.compiler
+  api('androidx.hilt:hilt-work:1.0.0')
+  kapt('androidx.hilt:hilt-compiler:1.0.0')
+  api('androidx.work:work-runtime-ktx:2.7.1')
+  api('com.google.dagger:hilt-android:2.42')
+  kapt('com.google.dagger:hilt-compiler:2.42')
+  api('io.netty:netty-transport:4.1.79.Final')
 }

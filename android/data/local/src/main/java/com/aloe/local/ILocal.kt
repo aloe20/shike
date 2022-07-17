@@ -8,16 +8,16 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ILocal {
-    suspend fun getAssetsStr(name: String): String?
-    suspend fun putPrivacyVisible(isVisible: Boolean)
-    suspend fun getPrivacyVisible(): Flow<Boolean>
-    suspend fun putBanner(banner: List<Banner>)
-    suspend fun getBanner(): Flow<MutableList<Banner>?>
+  suspend fun getAssetsStr(name: String): String?
+  suspend fun putPrivacyVisible(isVisible: Boolean)
+  suspend fun getPrivacyVisible(): Flow<Boolean>
+  suspend fun putBanner(banner: List<Banner>)
+  suspend fun getBanner(): Flow<MutableList<Banner>?>
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface LocalModule {
-    @Binds
-    fun getLocal(local: LocalImpl): ILocal
+  @Binds
+  fun getLocal(local: LocalImpl): ILocal
 }

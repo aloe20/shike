@@ -6,121 +6,25 @@ pluginManagement {
   }
   resolutionStrategy {
     eachPlugin {
-      /*if (requested.id.id == 'dagger.hilt.android.plugin') {
-        useModule("com.google.dagger:hilt-android-gradle-plugin:2.42")
-      } else*/ if (requested.id.id == 'com.google.protobuf') {
+      if (requested.id.id == 'com.google.protobuf') {
         //https://github.com/google/protobuf-gradle-plugin
-        useModule("com.google.protobuf:protobuf-gradle-plugin:0.8.18")
-      } else if (requested.id.id == 'com.tencent.vasdolly'){
-        useModule('com.tencent.vasdolly:plugin:3.0.4')
+        useModule("com.google.protobuf:protobuf-gradle-plugin:0.8.19")
       }
     }
   }
 }
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-  enableFeaturePreview('VERSION_CATALOGS')
-  String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
   repositories {
     google()
     mavenCentral()
     maven { url 'https://jitpack.io' }
-    maven { url '../flu/build/host/outputs/repo' }
-    maven { url "$storageUrl/download.flutter.io" }
     maven { url "$rootDir/../node_modules/react-native/android" }
     maven { url("$rootDir/../node_modules/jsc-android/dist") }
-  }
-  versionCatalogs {
-    libs {
-      version('activity', '1.5.0-rc01')
-      version('annotation', '1.2.0')
-      version('camera', '1.1.0-rc02')
-      version('compose', '1.2.0-rc01')
-      version('core', '1.8.0')
-      version('hilt', '1.0.0')
-      version('lifecycle', '2.5.0-rc02')
-      version('flutter', '1.0')
-      version('dagger', '2.42')
-      version('accompanist', '0.24.12-rc')
-      version('protobuf', '3.21.1')
-      version('moshi', '1.13.0')
-      version('kotlin', '1.6.21')
-      version('coroutines', '1.6.3')
-      version('ktlint', '10.3.0')
-      version('detekt', '1.20.0')
-      version('sdk_compile', '32')
-      version('sdk_target', '32')
-      version('sdk_min', '23')
-      version('tools', '33.0.0')
-      version('okio', '3.1.0')
-      alias('junit').to('junit:junit:4.13.2')
-      alias('flutter_debug').to('com.aloe.flu', 'flutter_debug').versionRef('flutter')
-      alias('flutter_release').to('com.aloe.flu', 'flutter_release').versionRef('flutter')
-      //https://github.com/Kotlin/kotlinx.coroutines
-      alias('coroutines-core').to('org.jetbrains.kotlinx', 'kotlinx-coroutines-core-jvm').versionRef('coroutines')
-      //https://maven.google.com/web/index.html
-      //https://developer.android.google.cn/jetpack/androidx/versions
-      alias('jetpack-activity').to('androidx.activity', 'activity-compose').versionRef('activity')
-      alias('jetpack-camera-camera2').to('androidx.camera', 'camera-camera2').versionRef('camera')
-      alias('jetpack-camera-lifecycle').to('androidx.camera', 'camera-lifecycle').versionRef('camera')
-      alias('jetpack-camera-view').to('androidx.camera', 'camera-view').versionRef('camera')
-      alias('jetpack-compose-livedata').to('androidx.compose.runtime', 'runtime-livedata').versionRef('compose')
-      alias('jetpack-compose-material').to('androidx.compose.material', 'material').versionRef('compose')
-      alias('jetpack-compose-preview').to('androidx.compose.ui', 'ui-tooling-preview').versionRef('compose')
-      alias('jetpack-compose-navigation').to('androidx.navigation:navigation-compose:2.5.0-rc02')
-      alias('jetpack-compose-paging').to('androidx.paging:paging-compose:1.0.0-alpha15')
-      alias('jetpack-core').to('androidx.core', 'core').versionRef('core')
-      alias('jetpack-store-pref').to('androidx.datastore:datastore-preferences:1.0.0')
-      alias('jetpack-hilt-compiler').to('androidx.hilt', 'hilt-compiler').versionRef('hilt')
-      alias('jetpack-hilt-compose').to('androidx.hilt', 'hilt-navigation-compose').versionRef('hilt')
-      alias('jetpack-hilt-work').to('androidx.hilt', 'hilt-work').versionRef('hilt')
-      alias('jetpack-lifecycle').to('androidx.lifecycle', 'lifecycle-runtime-ktx').versionRef('lifecycle')
-      alias('jetpack-lifecycle-process').to('androidx.lifecycle', 'lifecycle-process').versionRef('lifecycle')
-      alias('jetpack-rv').to('androidx.recyclerview:recyclerview:1.2.1')
-      alias('jetpack-room').to('androidx.room:room-ktx:2.4.2')
-      alias('jetpack-work').to('androidx.work:work-runtime-ktx:2.7.1')
-      //https://github.com/google/accompanist
-      alias('accompanist-systemuicontroller').to('com.google.accompanist', 'accompanist-systemuicontroller').versionRef('accompanist')
-      alias('accompanist-insets').to('com.google.accompanist', 'accompanist-insets').versionRef('accompanist')
-      alias('accompanist-pager').to('com.google.accompanist', 'accompanist-pager-indicators').versionRef('accompanist')
-      //alias('accompanist-permissions').to('com.google.accompanist', 'accompanist-permissions').versionRef('accompanist')
-      //https://github.com/google/dagger
-      alias('dagger-android').to('com.google.dagger', 'hilt-android').versionRef('dagger')
-      alias('dagger-compiler').to('com.google.dagger', 'hilt-compiler').versionRef('dagger')
-      alias('dagger-gradle').to('com.google.dagger', 'hilt-android-gradle-plugin').versionRef('dagger')
-      //https://github.com/protocolbuffers/protobuf
-      alias('protobuf-lite').to('com.google.protobuf', 'protobuf-javalite').versionRef('protobuf')
-      alias('protobuf-protoc').to('com.google.protobuf', 'protoc').versionRef('protobuf')
-      //https://github.com/zxing/zxing
-      alias('zxing').to('com.google.zxing:core:3.5.0')
-      //https://github.com/square/moshi
-      alias('moshi').to('com.squareup.moshi', 'moshi-kotlin').versionRef('moshi')
-      alias('moshi-codegen').to('com.squareup.moshi', 'moshi-kotlin-codegen').versionRef('moshi')
-      //https://github.com/square/retrofit
-      alias('retrofit-moshi').to('com.squareup.retrofit2:converter-moshi:2.9.0')
-      //https://github.com/square/okio
-      alias('okio').to('com.squareup.okio', 'okio-jvm').versionRef('okio')
-      //https://github.com/coil-kt/coil
-      alias('coil').to('io.coil-kt:coil-compose:2.1.0')
-      //https://github.com/netty/netty
-      alias('netty').to('io.netty:netty-transport:4.1.78.Final')
-      //https://github.com/Tencent/VasDolly
-      alias('vasdolly').to('com.tencent.vasdolly:helper:3.0.4')
-      //https://github.com/lzyzsd/JsBridge
-      alias('jsbridge').to('com.github.lzyzsd:jsbridge:1.0.4')
-      //https://github.com/facebook/react-native
-      alias('rn').to('com.facebook.react:react-native:0.69.0')
-      alias('jsc').to('org.webkit:android-jsc:r250230')
-      //https://github.com/JLLeitschuh/ktlint-gradle
-      alias('quality-ktlint-gradle').to('org.jlleitschuh.gradle', 'ktlint-gradle').versionRef('ktlint')
-      //https://github.com/detekt/detekt
-      alias('quality-detekt-gradle').to('io.gitlab.arturbosch.detekt', 'detekt-gradle-plugin').versionRef('detekt')
-    }
   }
 }
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 rootProject.name = "android"
-include(':app', ':flu')
-project(':flu').projectDir = file('../flu')
+include(':app', ':data', ':ui')
 include(':data:bean', ':data:http', ':data:local', ':data:socket')
-include(':ui:excel', ':ui:flu', ':ui:rn', ':ui:web', ':ui:zxing')
+include(':ui:chart', ':ui:excel', ':ui:rn')

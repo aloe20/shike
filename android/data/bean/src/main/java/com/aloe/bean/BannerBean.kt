@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class BannerBean(
-    val title: String? = null,
-    val desc: String? = null,
-    val imagePath: String? = null,
-    val url: String? = null
+  val title: String? = null,
+  val desc: String? = null,
+  val imagePath: String? = null,
+  val url: String? = null
 )

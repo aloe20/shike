@@ -226,7 +226,7 @@ task pmd(type: Pmd) {
 ```
 
 这里的配置比较简单。如ignoreFailures是否忽略失败，继续检测；ruleSetFiles设置语法文件，source设置检测源文件，html.enabled是否生成html报告文档，destination设置报告文件。我们看一下生成的报告  
-![pmd](../images/pmd.jpg)  
+![pmd](/images/pmd.jpg)  
 左边是源文件，右边是警告描述信息。如导入了无用的包或类，属性与方法名相同，应该使用logger代替printStackTrace等等。
 
 #### 6.3配置checkStyle

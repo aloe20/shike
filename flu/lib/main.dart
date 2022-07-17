@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
+@pragma("vm:entry-point")
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -8,6 +11,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var defaultRouteName = window.defaultRouteName;
+    debugPrint('---> $defaultRouteName');
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

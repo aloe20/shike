@@ -1,17 +1,16 @@
 plugins {
-  id 'com.android.library'
-  id 'org.jetbrains.kotlin.android'
-  id 'org.jetbrains.kotlin.kapt'
-  id 'org.jetbrains.kotlin.plugin.parcelize'
+  id('com.android.library')
+  id('org.jetbrains.kotlin.android')
+  id('org.jetbrains.kotlin.kapt')
 }
 
 android {
-  compileSdk libs.versions.sdk.compile.get().toInteger()
-  buildToolsVersion libs.versions.tools.get()
+  compileSdk 32
+  buildToolsVersion '33.0.0'
   defaultConfig {
-    minSdk libs.versions.sdk.min.get().toInteger()
-    targetSdk libs.versions.sdk.target.get().toInteger()
-      consumerProguardFiles "consumer-rules.pro"
+    minSdk 24
+    targetSdk 32
+    consumerProguardFiles "consumer-rules.pro"
   }
 
   buildTypes {
@@ -27,10 +26,9 @@ android {
   kotlinOptions {
     jvmTarget = '11'
   }
-    namespace 'com.aloe.bean'
 }
 
 dependencies {
-  api libs.moshi
-  kapt libs.moshi.codegen
+  api('com.squareup.moshi:moshi-kotlin:1.13.0')
+  kapt('com.squareup.moshi:moshi-kotlin-codegen:1.13.0')
 }

@@ -5,6 +5,6 @@ import androidx.work.WorkInfo
 import com.aloe.bean.BannerBean
 
 interface IHttp {
-    suspend fun loadBanner(): Result<List<BannerBean>?>
-    fun download(url: String): LiveData<WorkInfo>
+  suspend fun loadBanner(): Result<List<BannerBean>?>
+  fun download(url: String): LiveData<WorkInfo>
 }

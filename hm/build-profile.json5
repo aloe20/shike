@@ -1,0 +1,41 @@
+{
+ "app": {
+  "signingConfigs": [
+   {
+    "name": "default",
+    "type": "HarmonyOS",
+    "material": {
+     "certpath": "key/auto_debug_hm.cer",
+     "storePassword": "00000019052055FF6A4780964B8C9B4D3767A0D2E55798E4A66038CEB594B491EC96A90658C13C5994",
+     "keyAlias": "debugKey",
+     "keyPassword": "00000019A28EFA8D9BD70471285CED46CE2D3BCABCFC46B2F90E4D17812C18ED545EAE992348D6CB4D",
+     "profile": "key/auto_debug_hm.p7b",
+     "signAlg": "SHA256withECDSA",
+     "storeFile": "key/auto_debug_hm.p12"
+    }
+   }
+  ],
+  "compileSdkVersion": 8,
+  "compatibleSdkVersion": 6,
+  "products": [
+   {
+    "name": "default",
+    "signingConfig": "default",
+   }
+  ]
+ },
+ "modules": [
+  {
+   "name": "entry",
+   "srcPath": "./entry",
+   "targets": [
+    {
+     "name": "default",
+     "applyToProducts": [
+      "default"
+     ]
+    }
+   ]
+  }
+ ]
+}
