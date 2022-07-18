@@ -64,7 +64,7 @@ fun AppTheme(
   val view = LocalView.current
   if (!view.isInEditMode) {
     SideEffect {
-      with(((view.context as ContextWrapper).baseContext as Activity).window) {
+      (if (view.context is Activity) (view.context as Activity).window else ((view.context as ContextWrapper).baseContext as Activity).window).apply {
         statusBarColor = Color.Transparent.toArgb()
         WindowCompat.getInsetsController(this, view).isAppearanceLightStatusBars = !darkTheme
       }
