@@ -1,4 +1,4 @@
-package com.aloe.shike
+package com.aloe.shike.simple
 
 import android.app.Activity
 import android.content.ContextWrapper
