@@ -25,6 +25,7 @@ dependencyResolutionManagement {
 }
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 rootProject.name = "android"
-include(':app', ':data', ':ui')
+include(':app', ':data', ':ui', ':rn')
 include(':data:bean', ':data:http', ':data:local', ':data:socket')
 include(':ui:chart', ':ui:excel', ':ui:rn')
+project(':rn').projectDir = file('../rn')

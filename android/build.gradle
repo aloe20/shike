@@ -26,6 +26,9 @@ subprojects {
           case 'androidx.appcompat':
             it.useVersion('1.4.2')
             break
+          case 'androidx.compose.compiler':
+            it.useVersion('1.2.+')
+            break
           case 'androidx.compose.animation':
           case 'androidx.compose.foundation':
           case 'androidx.compose.material':

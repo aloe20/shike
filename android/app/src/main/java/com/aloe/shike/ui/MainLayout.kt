@@ -55,8 +55,8 @@ fun MainLayout() {
       when (it) {
         0 -> RecommendLayout()
         1 -> Text(text = "ITEM1", modifier = Modifier.clickable {
-//          navController.navigate("react")
-          launcher?.launch(Manifest.permission.CAMERA)
+          navController.navigate("react")
+//          launcher?.launch(Manifest.permission.CAMERA)
         })
       }
     }

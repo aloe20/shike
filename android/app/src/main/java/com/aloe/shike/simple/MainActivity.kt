@@ -1,8 +1,12 @@
 package com.aloe.shike.simple
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -27,22 +31,30 @@ class MainActivity : AppCompatActivity() {
     setContent {
       val navController = rememberNavController()
       AppTheme {
-        Surface(modifier = Modifier
-          .fillMaxSize()
-          .systemBarsPadding(), color = MaterialTheme.colorScheme.background) {
+        Surface(
+          modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(), color = MaterialTheme.colorScheme.background
+        ) {
           CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(navController = navController, startDestination = "main") {
               composable("main") { MainLayout() }
-              composable("react"){ ReactLayout{navController.navigateUp()} }
-              composable("scan"){ ZxingLayout(result = {
-                Log.e("aloe", "--> $it")
-                navController.navigateUp()
-              })
+              composable("react") { ReactLayout { navController.navigateUp() } }
+              composable("scan") {
+                ZxingLayout(result = {
+                  Log.e("aloe", "--> $it")
+                  navController.navigateUp()
+                })
               }
             }
           }
         }
       }
+    }
+    if(!Settings.canDrawOverlays(this)) {
+      registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+      }.launch(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package: $packageName")))
     }
   }
 }

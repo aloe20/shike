@@ -8,8 +8,8 @@
     "dev": "vite serve vite",
     "build": "vue-tsc --noEmit && vite build vite --emptyOutDir",
     "preview": "vite preview vite",
-    "rn": "yarn react-native start rn/index.js",
-    "rn:build": "npx react-native bundle --platform android --dev false --entry-file ./rn/index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "rn": "react-native start rn/index.js --port 8081",
+    "rn:build": "react-native bundle --platform android --dev false --entry-file rn/index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },

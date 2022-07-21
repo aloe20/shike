@@ -36,8 +36,11 @@ fun ReactLayout(backCallback: (() -> Unit)? = null) {
       )
     }
   }) { padding ->
-    AndroidView(factory = { ReactView(it) }, modifier = Modifier.padding(padding)) {
-      it.setBackBtnHandler { backCallback?.invoke() }.loadPage(null, Uri.parse("assets://index.android.bundle"))
+    AndroidView(
+      factory = { ReactView(it).apply { setBackBtnHandler { backCallback?.invoke() } } },
+      modifier = Modifier.padding(padding)
+    ) {
+      it.loadPage(Uri.parse("assets://index.bundle"))
     }
   }
 }
