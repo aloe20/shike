@@ -1,5 +1,9 @@
 package com.aloe.shike.ui
 
+import android.Manifest
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,27 +16,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.aloe.shike.R
+import com.aloe.shike.simple.LocalNavController
 import com.aloe.shike.simple.Purple40
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecommendLayout() {
-  val systemUiController = rememberSystemUiController()
-  val statusBarDarkIcons by remember { mutableStateOf(false) }
-  val navigationBarDarkIcons by remember { mutableStateOf(false) }
-
-  LaunchedEffect(systemUiController, statusBarDarkIcons, navigationBarDarkIcons) {
-    systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons
-    systemUiController.navigationBarDarkContentEnabled = navigationBarDarkIcons
-  }
   val state = rememberDrawerState(DrawerValue.Closed)
   var value by remember { mutableStateOf(0) }
+  val navController = LocalNavController.current
+  val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+    if (it) {
+      navController.navigate("scan")
+    }else{
+      Log.e("aloe", "没有权限")
+    }
+  }
   ModalNavigationDrawer(drawerContent = {
     Row(modifier = Modifier.fillMaxSize()) {
       Column(
@@ -78,6 +82,18 @@ fun RecommendLayout() {
             value++
           }) {
             Icon(imageVector = Icons.Rounded.Menu, contentDescription = "", tint = Color.White)
+          }
+          IconButton(modifier = Modifier
+            .align(Alignment.TopEnd)
+            .systemBarsPadding()
+            .size(44.dp), onClick = {
+            launcher.launch(Manifest.permission.CAMERA)
+          }) {
+            Icon(
+              imageVector = ImageVector.vectorResource(id = R.drawable.ic_scan),
+              contentDescription = "",
+              tint = Color.White
+            )
           }
         }
       }

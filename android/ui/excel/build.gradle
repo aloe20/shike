@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-  compileSdk 32
-  buildToolsVersion '33.0.0'
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.sdk.tool.get()
   defaultConfig {
-    minSdk 24
-    targetSdk 32
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
     consumerProguardFiles "consumer-rules.pro"
   }
 
@@ -28,5 +28,5 @@ android {
 }
 
 dependencies {
-  api('androidx.recyclerview:recyclerview:1.2.1')
+  api(libs.androidx.recycler)
 }

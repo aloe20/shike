@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-  compileSdk 32
-  buildToolsVersion '33.0.0'
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.sdk.tool.get()
   defaultConfig {
     applicationId 'com.aloe.shike'
-    minSdk 24
-    targetSdk 32
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
     versionCode 1
     versionName '1.0'
   }
@@ -33,7 +33,7 @@ android {
     compose true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion '1.2.0-rc03'
+    kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
   }
   packagingOptions {
     resources {
@@ -44,26 +44,22 @@ android {
 
 dependencies {
   implementation project(path: ':ui:rn')
-  //https://maven.google.com/web/index.html
-  //https://developer.android.google.cn/jetpack/androidx/versions
-  implementation('androidx.camera:camera-camera2:1.1.0')
-  implementation('androidx.camera:camera-lifecycle:1.1.0')
-  implementation('androidx.camera:camera-view:1.1.0')
-  implementation('androidx.compose.material3:material3:1.0.0-alpha14')
-  implementation('androidx.constraintlayout:constraintlayout-compose:1.0.1')
-  implementation('androidx.lifecycle:lifecycle-livedata-ktx:2.5.0')
-  implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.5.0')
-  implementation('androidx.navigation:navigation-compose:2.5.0')
-  //https://github.com/google/accompanist
-  implementation('com.google.accompanist:accompanist-pager-indicators:0.24.13-rc')
-  implementation('com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc')
-  implementation('com.google.android.material:material:1.6.1')
-  //https://github.com/google/dagger
-  implementation('com.google.dagger:hilt-android:2.43')
-  kapt('com.google.dagger:hilt-compiler:2.43')
-  //https://github.com/zxing/zxing
-  implementation('com.google.zxing:core:3.5.0')
-  //https://github.com/coil-kt/coil
-  implementation('io.coil-kt:coil-compose:2.1.0')
-  testImplementation('junit:junit:4.13.2')
+
+  implementation(libs.androidx.camera)
+  implementation(libs.androidx.camera.lifecycle)
+  implementation(libs.androidx.camera.view)
+  implementation(libs.androidx.compose.constraint)
+  implementation(libs.androidx.compose.material)
+  implementation(libs.androidx.compose.navigation)
+  implementation(libs.androidx.lifecycle.livedata)
+  implementation(libs.androidx.lifecycle.runtime)
+  implementation(libs.google.accompanist.pager)
+  implementation(libs.google.accompanist.permissions)
+  implementation(libs.google.accompanist.systemui)
+  //implementation('com.google.android.material:material:1.6.1')
+  api(libs.google.dagger.android)
+  kapt(libs.google.dagger.compiler)
+  implementation(libs.google.zxing)
+  implementation(libs.coil)
+  testImplementation(libs.test.junit)
 }

@@ -1,0 +1,72 @@
+[versions]
+sdk-min = "24"
+sdk-compile = "32"
+sdk-target = "32"
+sdk-tool = "33.0.0"
+agp = "7.2.1"
+kotlin = "1.7.0"
+# https://github.com/Kotlin/kotlinx.coroutines
+coroutines = "1.6.3"
+# https://maven.google.com/web/index.html
+# https://developer.android.google.cn/jetpack/androidx/versions
+annotation = "1.2.0"
+camera = "1.1.0"
+compose = "1.2.0-rc03"
+composeCompiler = "1.2.0"
+core = "1.8.0"
+datastore = "1.0.0"
+fragment = "1.5.0"
+hilt = "1.0.0"
+lifecycle = "2.5.0"
+# https://github.com/google/accompanist
+accompanist = "0.24.13-rc"
+# https://github.com/google/dagger
+dagger = "2.43"
+# https://github.com/square/moshi
+moshi = "1.13.0"
+# https://github.com/square/okio
+okio = "3.2.0"
+# https://github.com/square/okhttp
+okhttp = "4.10.0"
+
+[libraries]
+androidx-camera = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camera" }
+androidx-compose-constraint = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+androidx-compose-material = "androidx.compose.material3:material3:1.0.0-alpha14"
+androidx-compose-navigation = "androidx.navigation:navigation-compose:2.5.0"
+androidx-store-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hilt" }
+androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-recycler = "androidx.recyclerview:recyclerview:1.2.1"
+androidx-work = "androidx.work:work-runtime-ktx:2.7.1"
+google-accompanist-pager = {module="com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist"}
+google-accompanist-permissions = {module="com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
+google-accompanist-systemui = {module="com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist"}
+google-dagger-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
+google-dagger-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
+google-dagger-gradle = {module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger"}
+# https://github.com/protocolbuffers/protobuf
+google-protobuf = "com.google.protobuf:protobuf-javalite:3.21.3"
+google-protobuf-protoc = "com.google.protobuf:protoc:3.21.2"
+# https://github.com/google/protobuf-gradle-plugin
+google-protobuf-gradle = "com.google.protobuf:protobuf-gradle-plugin:0.8.19"
+# https://github.com/zxing/zxing
+google-zxing = "com.google.zxing:core:3.5.0"
+# https://github.com/PhilJay/MPAndroidChart
+mpchart = "com.github.PhilJay:MPAndroidChart:v3.1.0"
+# https://github.com/square/retrofit
+squareup-retrofit-moshi = "com.squareup.retrofit2:converter-moshi:2.9.0"
+squareup-moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+squareup-moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+# https://github.com/facebook/react-native
+rn = "com.facebook.react:react-native:0.69.2"
+jsc = "org.webkit:android-jsc:r250230"
+# https://github.com/coil-kt/coil
+coil = "io.coil-kt:coil-compose:2.1.0"
+# https://github.com/netty/netty
+netty = "io.netty:netty-transport:4.1.79.Final"
+test-junit = "junit:junit:4.13.2"
