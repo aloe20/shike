@@ -4,7 +4,7 @@ buildscript {
     google()
   }
   dependencies {
-    classpath('com.google.dagger:hilt-android-gradle-plugin:2.42')
+    classpath('com.google.dagger:hilt-android-gradle-plugin:2.43')
   }
 }
 plugins {
@@ -59,7 +59,8 @@ subprojects {
             it.useVersion('1.6.1')
             break
           case 'com.squareup.okio':
-            it.useVersion('3.1.0')
+            //https://github.com/square/okio
+            it.useVersion('3.2.0')
             break
           case 'com.squareup.okhttp3':
             //https://github.com/square/okhttp
@@ -69,8 +70,9 @@ subprojects {
             it.useVersion('1.7.0')
             break
           case 'org.jetbrains.kotlinx':
+            //https://github.com/Kotlin/kotlinx.coroutines
             if (it.requested.name != 'kotlinx-metadata-jvm') {
-              it.useVersion('1.6.1')
+              it.useVersion('1.6.4')
             }
             break
         }

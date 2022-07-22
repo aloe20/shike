@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
       AppTheme {
         Surface(
           modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(), color = MaterialTheme.colorScheme.background
+            .fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
           CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(navController = navController, startDestination = "main") {
