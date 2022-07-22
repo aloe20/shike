@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-  compileSdk 32
-  buildToolsVersion '33.0.0'
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.sdk.tool.get()
   defaultConfig {
-    minSdk 24
-    targetSdk 32
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
     consumerProguardFiles "consumer-rules.pro"
   }
 
@@ -31,7 +31,7 @@ android {
 }
 protobuf {
   protoc {
-    artifact = 'com.google.protobuf:protoc:3.21.2'
+    artifact = libs.google.protobuf.protoc.get()
   }
   generateProtoTasks {
     all().each { task ->
@@ -44,9 +44,8 @@ protobuf {
   }
 }
 dependencies {
-  api('androidx.datastore:datastore-preferences:1.0.0')
-  //https://github.com/protocolbuffers/protobuf
-  api('com.google.protobuf:protobuf-javalite:3.21.3')
-  api('com.google.dagger:hilt-android:2.43')
-  kapt('com.google.dagger:hilt-compiler:2.43')
+  api(libs.androidx.store.preferences)
+  api(libs.google.dagger.android)
+  kapt(libs.google.dagger.compiler)
+  api(libs.google.protobuf)
 }

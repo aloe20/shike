@@ -4,14 +4,14 @@ pluginManagement {
     google()
     mavenCentral()
   }
-  resolutionStrategy {
+  /*resolutionStrategy {
     eachPlugin {
       if (requested.id.id == 'com.google.protobuf') {
         //https://github.com/google/protobuf-gradle-plugin
         useModule("com.google.protobuf:protobuf-gradle-plugin:0.8.19")
       }
     }
-  }
+  }*/
 }
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -29,3 +29,4 @@ include(':app', ':data', ':ui', ':rn')
 include(':data:bean', ':data:http', ':data:local', ':data:socket')
 include(':ui:chart', ':ui:excel', ':ui:rn')
 project(':rn').projectDir = file('../rn')
+enableFeaturePreview('VERSION_CATALOGS')

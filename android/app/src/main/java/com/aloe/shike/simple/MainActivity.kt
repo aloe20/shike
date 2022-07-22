@@ -5,11 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
@@ -24,17 +23,17 @@ import com.aloe.shike.ui.ZxingLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     WindowCompat.setDecorFitsSystemWindows(window, false)
     setContent {
-      val navController = rememberNavController()
       AppTheme {
         Surface(
           modifier = Modifier
             .fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
+          val navController = rememberNavController()
           CompositionLocalProvider(LocalNavController provides navController) {
             NavHost(navController = navController, startDestination = "main") {
               composable("main") { MainLayout() }

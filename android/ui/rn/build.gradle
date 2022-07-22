@@ -4,11 +4,11 @@ plugins {
 }
 apply from: file("../../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 android {
-  compileSdk 32
-  buildToolsVersion '33.0.0'
+  compileSdk libs.versions.sdk.compile.get().toInteger()
+  buildToolsVersion libs.versions.sdk.tool.get()
   defaultConfig {
-    minSdk 24
-    targetSdk 32
+    minSdk libs.versions.sdk.min.get().toInteger()
+    targetSdk libs.versions.sdk.target.get().toInteger()
     consumerProguardFiles "consumer-rules.pro"
   }
 
@@ -28,8 +28,7 @@ android {
 }
 
 dependencies {
-  api('androidx.lifecycle:lifecycle-runtime-ktx:2.5.0')
-  //https://github.com/facebook/react-native
-  api('com.facebook.react:react-native:0.69.2')
-  api('org.webkit:android-jsc:r250230')
+  api(libs.androidx.lifecycle.runtime)
+  api(libs.rn)
+  implementation(libs.jsc)
 }

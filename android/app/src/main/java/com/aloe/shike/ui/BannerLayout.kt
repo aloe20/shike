@@ -41,11 +41,6 @@ fun BannerLayout(height:Dp, list:List<String>) {
     ) { index ->
       AsyncImage(
         model = list[pageMapper(index)],
-        /*model = randomImageUrl(
-          width = LocalContext.current.resources.displayMetrics.widthPixels,
-          height = height.value.toInt(),
-          seed = index
-        ),*/
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
