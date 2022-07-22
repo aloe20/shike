@@ -15,11 +15,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
-import com.facebook.infer.annotation.Assertions
-import com.facebook.react.*
 import com.facebook.react.BuildConfig
-import com.facebook.react.bridge.*
-import com.facebook.react.common.LifecycleState
+import com.facebook.react.ReactNativeHost
+import com.facebook.react.ReactPackage
+import com.facebook.react.ReactRootView
+import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.react.modules.network.OkHttpClientProvider
 import com.facebook.react.shell.MainReactPackage
@@ -125,7 +126,7 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
   }
 
-  private fun realLoadPage(jsBundle: Uri?) {
+  private fun realLoadPage(jsBundle: Uri) {
     reactInstanceManager?.onHostDestroy(activity)
     unmountReactApplication()
     startReactApplication(
@@ -142,16 +143,14 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
   fun setBackBtnHandler(callback: () -> Unit) = apply { backCallback = callback }
 
   companion object {
-    private class ReactHost(private val app: Application, private val jsBundle: Uri?) : ReactNativeHost(app) {
+    private class ReactHost(app: Application, private val jsBundle: Uri) : ReactNativeHost(app) {
       override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
       override fun getPackages(): MutableList<ReactPackage> = mutableListOf(MainReactPackage(), RnReactPackage())
 
       override fun getJSMainModuleName(): String = "index"
 
-      override fun getBundleAssetName(): String = "index.bundle"
-
-      override fun getJSBundleFile(): String? = if (jsBundle == null) null else when (jsBundle.scheme) {
+      override fun getJSBundleFile(): String? = when (jsBundle.scheme) {
         "assets" -> jsBundle.toString()
         "file" -> jsBundle.path
         else -> null
