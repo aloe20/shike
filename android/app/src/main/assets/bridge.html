@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web</title>
+</head>
+
+<body>
+<div style="padding: 16px;">
+  <div id="show">Hello jsBridge</div><br/>
+  <button onclick="sendToAndroid();">发消息给Android</button><br/>
+  <button style="margin-top: 16px;" onclick="callbackToAndroid();">调用Android方法</button><br/>
+</div>
+</body>
+<script>
+  function sendToAndroid() {
+    let data = {id: 1, content: "发消息给Android"};
+    window.WebViewJavascriptBridge.send(data, function (responseData) {
+      document.getElementById("show").innerHTML = responseData;
+    });
+  }
+  function callbackToAndroid() {
+    window.WebViewJavascriptBridge.callHandler('submitFromWeb', { 'param': '传参给Android' }, function (responseData) {
+      document.getElementById("show").innerHTML = responseData;
+    });
+  }
+  function bridgeLog(logContent) {
+    document.getElementById("show").innerHTML = logContent;
+  }
+  function connectWebViewJavascriptBridge(callback) {
+    if (window.WebViewJavascriptBridge) {
+        callback(WebViewJavascriptBridge)
+    } else {
+      document.addEventListener('WebViewJavascriptBridgeReady', function () {
+        callback(WebViewJavascriptBridge)
+      }, false);
+    }
+  }
+  connectWebViewJavascriptBridge(function (bridge) {
+    bridge.init(function (message, responseCallback) {
+      let data = {'content': '给Android回调结果'};
+      document.getElementById("show").innerHTML = "收到Android的消息:"+message;
+      if (responseCallback) {
+        responseCallback(data);
+      }
+    });
+    bridge.registerHandler("functionInJs", function (data, responseCallback) {
+      document.getElementById("show").innerHTML = ("收到Android的消息:" + data);
+      if (responseCallback) {
+        responseCallback("给Android回调结果");
+      }
+    });
+  })
+</script>
+</html>

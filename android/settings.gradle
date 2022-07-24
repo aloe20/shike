@@ -27,6 +27,6 @@ apply from: file("../node_modules/@react-native-community/cli-platform-android/n
 rootProject.name = "android"
 include(':app', ':data', ':ui', ':rn')
 include(':data:bean', ':data:http', ':data:local', ':data:socket')
-include(':ui:chart', ':ui:excel', ':ui:rn')
+include(':ui:chart', ':ui:excel', ':ui:rn', ':ui:web')
 project(':rn').projectDir = file('../rn')
 enableFeaturePreview('VERSION_CATALOGS')

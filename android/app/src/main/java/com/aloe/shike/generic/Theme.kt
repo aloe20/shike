@@ -1,4 +1,4 @@
-package com.aloe.shike.simple
+package com.aloe.shike.generic
 
 import android.app.Activity
 import android.content.ContextWrapper
@@ -54,9 +54,8 @@ fun AppTheme(
   content: @Composable () -> Unit
 ) {
   val colorScheme = when {
-    dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-      val context = LocalContext.current
-      if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> with(LocalContext.current) {
+      if (darkTheme) dynamicDarkColorScheme(this) else dynamicLightColorScheme(this)
     }
     darkTheme -> DarkColorScheme
     else -> LightColorScheme

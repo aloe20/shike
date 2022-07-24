@@ -44,7 +44,7 @@ android {
 
 dependencies {
   implementation project(path: ':ui:rn')
-
+  implementation project(path: ':ui:web')
   implementation(libs.androidx.camera)
   implementation(libs.androidx.camera.lifecycle)
   implementation(libs.androidx.camera.view)
@@ -56,7 +56,7 @@ dependencies {
   implementation(libs.google.accompanist.pager)
   implementation(libs.google.accompanist.permissions)
   implementation(libs.google.accompanist.systemui)
-  //implementation('com.google.android.material:material:1.6.1')
+  implementation(libs.google.accompanist.webview)
   api(libs.google.dagger.android)
   kapt(libs.google.dagger.compiler)
   implementation(libs.google.zxing)

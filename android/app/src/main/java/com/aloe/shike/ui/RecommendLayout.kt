@@ -1,7 +1,10 @@
 package com.aloe.shike.ui
 
 import android.Manifest
-import android.util.Log
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -20,102 +23,158 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.navigation.NavHostController
 import com.aloe.shike.R
-import com.aloe.shike.simple.LocalNavController
-import com.aloe.shike.simple.Purple40
+import com.aloe.shike.generic.LocalNavController
+import com.aloe.shike.generic.Purple40
+import com.aloe.shike.generic.lineModifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecommendLayout() {
+  val context = LocalContext.current
+  val navController = LocalNavController.current
   val state = rememberDrawerState(DrawerValue.Closed)
   var value by remember { mutableStateOf(0) }
-  val navController = LocalNavController.current
+  var showDialog by remember { mutableStateOf(false) }
   val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
-    if (it) {
+    if (it) navController.navigate("scan") else showDialog = true
+  }
+  val resultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
       navController.navigate("scan")
-    }else{
-      Log.e("aloe", "没有权限")
+    }
+  }
+  if (showDialog) {
+    ShowDialog {
+      showDialog = false
+      if (it) {
+        resultLauncher.launch(
+          Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))
+        )
+      }
     }
   }
   ModalNavigationDrawer(drawerContent = {
-    Row(modifier = Modifier.fillMaxSize()) {
-      Column(
-        modifier = Modifier
-          .fillMaxHeight()
-          .weight(1F)
-          .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 0.dp))
-          .background(Color.White)
-      ) {
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(240.dp)
-            .background(Purple40)
-        ) {}
-      }
-      Spacer(modifier = Modifier
-        .width(120.dp)
-        .fillMaxHeight()
-        .clickable {
-          value++
-        })
-    }
+    DrawerContentLayout(navController) { value++ }
   }, drawerState = state, gesturesEnabled = false, drawerContainerColor = Color.Transparent) {
-    Scaffold(modifier = Modifier.fillMaxSize()) {
-      Column(modifier = Modifier.padding(it)) {
-        Box(
-          modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-        ) {
-          val height = 200.dp
-          BannerLayout(height = height, list = List(4) { index ->
-            randomImageUrl(
-              width = LocalContext.current.resources.displayMetrics.widthPixels,
-              height = height.value.toInt(),
-              seed = index + 1
-            )
-          })
-          IconButton(modifier = Modifier
-            .systemBarsPadding()
-            .size(44.dp), onClick = {
-            value++
-          }) {
-            Icon(imageVector = Icons.Rounded.Menu, contentDescription = "", tint = Color.White)
-          }
-          IconButton(modifier = Modifier
-            .align(Alignment.TopEnd)
-            .systemBarsPadding()
-            .size(44.dp), onClick = {
-            launcher.launch(Manifest.permission.CAMERA)
-          }) {
-            Icon(
-              imageVector = ImageVector.vectorResource(id = R.drawable.ic_scan),
-              contentDescription = "",
-              tint = Color.White
-            )
-          }
-        }
-      }
+    DrawerContainerLayout(menuClick = { value++ }) {
+      launcher.launch(Manifest.permission.CAMERA)
     }
   }
   if (value > 0) {
     LaunchedEffect(key1 = value) {
-      if (state.isOpen) {
-        state.close()
-      } else {
-        state.open()
+      if (state.isOpen) state.close() else state.open()
+    }
+  }
+}
+
+@Composable
+fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
+  Row(modifier = Modifier.fillMaxSize()) {
+    Column(
+      modifier = Modifier
+        .fillMaxHeight()
+        .weight(1F)
+        .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 0.dp))
+        .background(Color.White)
+    ) {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(240.dp)
+          .background(Purple40)
+      ) {}
+      Text(text = "React Native", modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+          appNavigate(navController, Page.React.setUrl("assets://index.bundle"))
+          onClick.invoke()
+        }
+        .padding(16.dp, 8.dp)
+      )
+      Spacer(modifier = lineModifier())
+      Text(text = "Js Bridge", modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+          appNavigate(navController, Page.Web.setUrl("file:///android_asset/bridge.html"))
+          onClick.invoke()
+        }
+        .padding(16.dp, 8.dp)
+      )
+      Spacer(modifier = lineModifier())
+    }
+    Spacer(
+      modifier = Modifier
+        .width(120.dp)
+        .fillMaxHeight()
+        .clickable(onClick = onClick)
+    )
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DrawerContainerLayout(menuClick: () -> Unit, scanClick: () -> Unit) {
+  Scaffold(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.padding(it)) {
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .wrapContentHeight()
+      ) {
+        val height = 200.dp
+        BannerLayout(height = height, list = List(4) { index ->
+          randomImageUrl(
+            width = LocalContext.current.resources.displayMetrics.widthPixels,
+            height = height.value.toInt(),
+            seed = index + 1
+          )
+        })
+        IconButton(
+          modifier = Modifier
+            .systemBarsPadding()
+            .size(44.dp), onClick = menuClick
+        ) {
+          Icon(imageVector = Icons.Rounded.Menu, contentDescription = "", tint = Color.White)
+        }
+        IconButton(
+          modifier = Modifier
+            .align(Alignment.TopEnd)
+            .systemBarsPadding()
+            .size(44.dp), onClick = scanClick
+        ) {
+          Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_scan),
+            contentDescription = "",
+            tint = Color.White
+          )
+        }
       }
     }
   }
 }
 
+@Composable
+fun ShowDialog(click: (Boolean) -> Unit) {
+  AlertDialog(
+    onDismissRequest = { },
+    confirmButton = {
+      TextButton(onClick = {
+        click.invoke(true)
+      }) {
+        Text(text = "去设置")
+      }
+    },
+    dismissButton = {
+      TextButton(onClick = { click.invoke(false) }) { Text(text = "取消") }
+    },
+    title = { Text(text = "提示") },
+    text = { Text(text = "扫二维码需要相机权限，去设置页面打开权限") })
+}
+
 private val rangeForRandom = (0..100000)
 
-private fun randomImageUrl(
-  width: Int,
-  height: Int,
-  seed: Int = rangeForRandom.random()
-): String {
-  return "https://picsum.photos/seed/$seed/$width/$height"
-}
+private fun randomImageUrl(width: Int, height: Int, seed: Int = rangeForRandom.random()) =
+  "https://picsum.photos/seed/$seed/$width/$height"

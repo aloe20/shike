@@ -46,6 +46,7 @@ androidx-work = "androidx.work:work-runtime-ktx:2.7.1"
 google-accompanist-pager = {module="com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist"}
 google-accompanist-permissions = {module="com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
 google-accompanist-systemui = {module="com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist"}
+google-accompanist-webview = {module="com.google.accompanist:accompanist-webview", version.ref = "accompanist"}
 google-dagger-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 google-dagger-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 google-dagger-gradle = {module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger"}

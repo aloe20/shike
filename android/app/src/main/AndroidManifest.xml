@@ -4,9 +4,8 @@
   package="com.aloe.shike">
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.CAMERA"/>
-  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <application
-    android:name=".simple.App"
+    android:name=".generic.App"
     android:allowBackup="true"
     android:dataExtractionRules="@xml/data_extraction_rules"
     android:fullBackupContent="@xml/backup_rules"
@@ -18,7 +17,7 @@
     android:theme="@style/Theme.App"
     tools:targetApi="31">
     <activity
-      android:name=".simple.MainActivity"
+      android:name=".generic.MainActivity"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,7 @@
     </activity>
     <activity-alias
       android:name=".MainActivity"
-      android:targetActivity=".simple.MainActivity" />
+      android:targetActivity=".generic.MainActivity" />
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
   </application>
 

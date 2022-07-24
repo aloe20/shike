@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aloe.shike.R
+import com.aloe.shike.generic.lineModifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -32,7 +33,7 @@ fun MainLayout() {
   val scope = rememberCoroutineScope()
   Box(modifier = Modifier.fillMaxSize()) {
     val state = rememberPagerState()
-    var statusBarDarkIcons by mutableStateOf(state.currentPage==1)
+    var statusBarDarkIcons by mutableStateOf(state.currentPage == 1)
     HorizontalPager(
       count = list.size, modifier = Modifier
         .fillMaxSize()
@@ -55,7 +56,7 @@ fun MainLayout() {
         BottomNavigationItem(
           selected = state.currentPage == index,
           onClick = {
-            statusBarDarkIcons = index==1
+            statusBarDarkIcons = index == 1
             scope.launch {
               state.animateScrollToPage(index)
             }
@@ -79,14 +80,7 @@ fun MainLayout() {
         )
       }
     }
-    Spacer(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(bottom = 55.8.dp)
-        .height(0.2.dp)
-        .background(Color(0x33888888))
-        .align(Alignment.BottomCenter)
-    )
+    Spacer(modifier = lineModifier(bottom = 55.7.dp).align(Alignment.BottomCenter))
     val systemUiController = rememberSystemUiController()
     LaunchedEffect(systemUiController, statusBarDarkIcons) {
       systemUiController.statusBarDarkContentEnabled = statusBarDarkIcons

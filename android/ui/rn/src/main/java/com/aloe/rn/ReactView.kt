@@ -4,13 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
-import android.widget.TextView
+import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.MainThread
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -25,6 +21,7 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.react.modules.network.OkHttpClientProvider
 import com.facebook.react.shell.MainReactPackage
 import com.facebook.react.uimanager.ViewManager
+import com.facebook.soloader.SoLoader
 import java.io.File
 import java.io.IOException
 import okhttp3.Call
@@ -36,7 +33,7 @@ import okio.sink
 
 class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
   ReactRootView(context, attrs, defStyle) {
-  private var activity: FragmentActivity? = context as? FragmentActivity
+  private var activity: ComponentActivity? = context as? ComponentActivity
   private var backCallback: (() -> Unit)? = null
   private val btnHandler = DefaultHardwareBackBtnHandler {
     reactInstanceManager?.onBackPressed() ?: backCallback?.invoke()
@@ -68,20 +65,6 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
   }
 
-  override fun onViewAdded(child: View?) {
-    super.onViewAdded(child)
-    (child as? TextView)?.addTextChangedListener(afterTextChanged = {
-      Log.d("aloe", "addTextChangedListener: $it")
-      Thread.dumpStack()
-    })
-    Log.d("aloe", "onViewAdded: ${child?.javaClass}")
-  }
-
-  override fun onViewRemoved(child: View?) {
-    super.onViewRemoved(child)
-    Log.d("aloe", "onViewRemoved: ${child?.javaClass}")
-  }
-
   /**
    * assets://index.bundle
    * file://sdcard/myapp_cache/index.bundle
@@ -99,7 +82,7 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
       if (file.exists() && file.length() > 0) {
         realLoadPage(Uri.fromFile(file))
       } else {
-        OkHttpClientProvider.getOkHttpClient().newCall(Request.Builder().url(getUrl(jsBundle)).build())
+        OkHttpClientProvider.getOkHttpClient().newCall(Request.Builder().url(jsBundle.toString()).build())
           .enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
               e.printStackTrace()
@@ -134,12 +117,6 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     )
   }
 
-  private fun getUrl(uri: Uri): String =
-    uri.buildUpon().appendQueryParameter("platform", "android")
-      .appendQueryParameter("dev", BuildConfig.DEBUG.toString())
-      .appendQueryParameter("app", context.packageName)
-      .appendQueryParameter("minify", true.toString()).build().toString()
-
   fun setBackBtnHandler(callback: () -> Unit) = apply { backCallback = callback }
 
   companion object {
@@ -163,6 +140,10 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
       override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<*, *>> =
         mutableListOf(ReactText())
+    }
+
+    fun initRn(context: Context) {
+      SoLoader.init(context, false)
     }
   }
 }

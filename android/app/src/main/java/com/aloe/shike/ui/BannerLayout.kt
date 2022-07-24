@@ -1,6 +1,5 @@
 package com.aloe.shike.ui
 
-import android.util.Log
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
@@ -9,10 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.aloe.shike.generic.log
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -22,11 +21,12 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerLayout(height:Dp, list:List<String>) {
+fun BannerLayout(height: Dp, list: List<String>) {
   val loopingCount = Int.MAX_VALUE
   val startIndex = loopingCount / 2
   val pagerState = rememberPagerState(initialPage = startIndex)
-  fun pageMapper(index: Int) = (index - startIndex).floorMod(list.size)
+  fun pageMapper(index: Int) =
+    if (list.isEmpty()) 0 else ((index - startIndex) - (index - startIndex).floorDiv(list.size) * list.size)
   Box(
     modifier = Modifier
       .fillMaxWidth()
@@ -88,17 +88,9 @@ fun BannerLayout(height:Dp, list:List<String>) {
             }
           }
         } catch (e: CancellationException) {
-          Log.i("page", "Launched paging cancelled")
+          "Launched paging cancelled".log(tr = e)
         }
       }
     }
   }
 }
-
-private fun Int.floorMod(other: Int): Int = when (other) {
-  0 -> this
-  else -> this - floorDiv(other) * other
-}
-
-
-
