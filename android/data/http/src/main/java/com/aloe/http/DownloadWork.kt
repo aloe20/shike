@@ -2,13 +2,9 @@ package com.aloe.http
 
 import android.content.Context
 import android.os.Environment
-import androidx.hilt.work.HiltWorker
 import androidx.lifecycle.LiveData
 import androidx.work.*
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import java.io.File
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.buffer
@@ -16,12 +12,11 @@ import okio.sink
 import okio.source
 import retrofit2.HttpException
 
-@HiltWorker
-internal class DownloadWork @AssistedInject constructor(
-  @Assisted val ctx: Context,
-  @Assisted val params: WorkerParameters
+internal class DownloadWork constructor(
+  private val ctx: Context,
+  private val params: WorkerParameters
 ) : CoroutineWorker(ctx, params) {
-  @Inject
+
   lateinit var httpApi: HttpApi
   override suspend fun doWork(): Result {
     var filePath = ""

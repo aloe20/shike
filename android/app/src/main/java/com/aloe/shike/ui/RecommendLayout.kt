@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,11 +25,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aloe.shike.R
 import com.aloe.shike.generic.LocalNavController
 import com.aloe.shike.generic.Purple40
 import com.aloe.shike.generic.lineModifier
+import com.aloe.shike.generic.log
+import com.aloe.shike.vm.RecommendVm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +68,7 @@ fun RecommendLayout() {
     }
   }
   if (value > 0) {
-    LaunchedEffect(key1 = value) {
+    LaunchedEffect(value) {
       if (state.isOpen) state.close() else state.open()
     }
   }
@@ -117,6 +121,8 @@ fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerContainerLayout(menuClick: () -> Unit, scanClick: () -> Unit) {
+  val vm = viewModel<RecommendVm>()
+  val uiState = vm.getUiState().observeAsState()
   Scaffold(modifier = Modifier.fillMaxSize()) {
     Column(modifier = Modifier.padding(it)) {
       Box(
@@ -152,7 +158,13 @@ fun DrawerContainerLayout(menuClick: () -> Unit, scanClick: () -> Unit) {
           )
         }
       }
+      uiState.value?.banner?.also { list->
+        Text(text = "$list")
+      }
     }
+  }
+  LaunchedEffect(Unit){
+    vm.loadData()
   }
 }
 

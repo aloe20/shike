@@ -1,11 +1,9 @@
 package com.aloe.socket
 
 import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.flow.StateFlow
 
-internal class SocketImpl @Inject constructor(@ApplicationContext val ctx: Context, private val udp: ClientUdp) :
+internal class SocketImpl constructor(private val ctx: Context, private val udp: ClientUdp) :
     ISocket {
     override fun initSocket() {
         SocketWorker.initSocket(ctx)

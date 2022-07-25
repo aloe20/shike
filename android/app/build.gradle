@@ -1,19 +1,29 @@
 plugins {
   id('com.android.application')
   id('org.jetbrains.kotlin.android')
-  id('org.jetbrains.kotlin.kapt')
-  id('dagger.hilt.android.plugin')
 }
 
 android {
   compileSdk libs.versions.sdk.compile.get().toInteger()
   buildToolsVersion libs.versions.sdk.tool.get()
+  signingConfigs {
+    sign {
+      storeFile file('../key.jks')
+      storePassword '123456'
+      keyAlias 'android'
+      keyPassword '123456'
+    }
+  }
   defaultConfig {
     applicationId 'com.aloe.shike'
     minSdk libs.versions.sdk.min.get().toInteger()
     targetSdk libs.versions.sdk.target.get().toInteger()
     versionCode 1
     versionName '1.0'
+    signingConfig signingConfigs.sign
+    ndk {
+      abiFilters 'arm64-v8a'
+    }
   }
 
   buildTypes {
@@ -37,29 +47,35 @@ android {
   }
   packagingOptions {
     resources {
-      excludes += '/META-INF/{AL2.0,LGPL2.1}'
+      excludes += ['/META-INF/{AL2.0,LGPL2.1}', 'META-INF/**']
+    }
+    jniLibs {
+      excludes += ['META-INF/**']
     }
   }
 }
 
 dependencies {
+  implementation project(path: ':ui:excel')
   implementation project(path: ':ui:rn')
   implementation project(path: ':ui:web')
+  implementation project(path: ':data:http')
   implementation(libs.androidx.camera)
   implementation(libs.androidx.camera.lifecycle)
   implementation(libs.androidx.camera.view)
   implementation(libs.androidx.compose.constraint)
+  implementation(libs.androidx.compose.livedata)
   implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.navigation)
-  implementation(libs.androidx.lifecycle.livedata)
+  implementation(libs.androidx.lifecycle.process)
   implementation(libs.androidx.lifecycle.runtime)
   implementation(libs.google.accompanist.pager)
   implementation(libs.google.accompanist.permissions)
   implementation(libs.google.accompanist.systemui)
   implementation(libs.google.accompanist.webview)
-  api(libs.google.dagger.android)
-  kapt(libs.google.dagger.compiler)
   implementation(libs.google.zxing)
   implementation(libs.coil)
+  debugImplementation libs.flutter.debug
+  releaseImplementation libs.flutter.release
   testImplementation(libs.test.junit)
 }

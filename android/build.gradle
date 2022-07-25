@@ -21,6 +21,9 @@ subprojects {
           case 'androidx.annotation':
             it.useVersion(libs.versions.annotation.get())
             break
+          case 'androidx.collection':
+            it.useVersion(libs.versions.collection.get())
+            break
           case 'androidx.compose.compiler':
             it.useVersion(libs.versions.composeCompiler.get())
             break

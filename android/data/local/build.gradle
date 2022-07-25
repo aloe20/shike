@@ -1,9 +1,7 @@
 plugins {
   id('com.android.library')
   id('org.jetbrains.kotlin.android')
-  id('org.jetbrains.kotlin.kapt')
   id('com.google.protobuf')
-  id('dagger.hilt.android.plugin')
 }
 
 android {
@@ -45,7 +43,5 @@ protobuf {
 }
 dependencies {
   api(libs.androidx.store.preferences)
-  api(libs.google.dagger.android)
-  kapt(libs.google.dagger.compiler)
   api(libs.google.protobuf)
 }

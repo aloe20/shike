@@ -29,6 +29,14 @@
       android:name=".MainActivity"
       android:targetActivity=".generic.MainActivity" />
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+    <provider
+      android:name="androidx.startup.InitializationProvider"
+      android:authorities="${applicationId}.androidx-startup"
+      android:exported="false"
+      tools:node="merge">
+      <meta-data  android:name="com.aloe.shike.generic.ConfigInitializer"
+        android:value="androidx.startup" />
+    </provider>
   </application>
 
 </manifest>

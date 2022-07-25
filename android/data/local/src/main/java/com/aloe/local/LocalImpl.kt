@@ -7,19 +7,15 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.aloe.proto.Banner
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-@Singleton
-internal class LocalImpl @Inject constructor(@ApplicationContext val ctx: Context) : ILocal {
+internal class LocalImpl constructor(val ctx: Context) : ILocal {
   private val settingsDataStore: DataStore<Preferences> =
     preferencesDataStore(name = "settings").getValue(ctx, Preferences::javaClass)
 

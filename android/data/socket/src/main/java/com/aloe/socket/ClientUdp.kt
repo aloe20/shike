@@ -11,16 +11,13 @@ import io.netty.channel.socket.DatagramPacket
 import io.netty.channel.socket.nio.NioDatagramChannel
 import io.netty.util.CharsetUtil
 import java.net.InetSocketAddress
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@Singleton
-internal class ClientUdp @Inject constructor() {
+internal class ClientUdp constructor() {
     private val sendFlow: MutableStateFlow<ByteArray> = MutableStateFlow(byteArrayOf())
     var receiveFlow: MutableStateFlow<ByteArray> = MutableStateFlow(byteArrayOf())
         private set
