@@ -25,13 +25,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.aloe.shike.R
 import com.aloe.shike.generic.LocalNavController
 import com.aloe.shike.generic.Purple40
 import com.aloe.shike.generic.lineModifier
-import com.aloe.shike.generic.log
 import com.aloe.shike.vm.RecommendVm
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +81,7 @@ fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
         .fillMaxHeight()
         .weight(1F)
         .clip(RoundedCornerShape(0.dp, 12.dp, 12.dp, 0.dp))
-        .background(Color.White)
+        .background(MaterialTheme.colorScheme.background)
     ) {
       Box(
         modifier = Modifier
@@ -130,7 +129,7 @@ fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DrawerContainerLayout(menuClick: () -> Unit, scanClick: () -> Unit) {
-  val vm = viewModel<RecommendVm>()
+  val vm = hiltViewModel<RecommendVm>()
   val uiState = vm.getUiState().observeAsState()
   Scaffold(modifier = Modifier.fillMaxSize()) {
     Column(modifier = Modifier.padding(it)) {

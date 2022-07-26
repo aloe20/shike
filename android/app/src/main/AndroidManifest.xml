@@ -28,6 +28,9 @@
     <activity-alias
       android:name=".MainActivity"
       android:targetActivity=".generic.MainActivity" />
+    <activity android:name=".generic.DetailActivity"
+      android:exported="false"
+      android:process=":aaa"/>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     <provider
       android:name="androidx.startup.InitializationProvider"

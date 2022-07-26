@@ -1,6 +1,8 @@
 plugins {
   id('com.android.application')
   id('org.jetbrains.kotlin.android')
+  id('org.jetbrains.kotlin.kapt')
+  id('dagger.hilt.android.plugin')
 }
 
 android {
@@ -64,6 +66,7 @@ dependencies {
   implementation(libs.androidx.camera.lifecycle)
   implementation(libs.androidx.camera.view)
   implementation(libs.androidx.compose.constraint)
+  implementation(libs.androidx.compose.hilt)
   implementation(libs.androidx.compose.livedata)
   implementation(libs.androidx.compose.material)
   implementation(libs.androidx.compose.navigation)
@@ -73,6 +76,8 @@ dependencies {
   implementation(libs.google.accompanist.permissions)
   implementation(libs.google.accompanist.systemui)
   implementation(libs.google.accompanist.webview)
+  implementation(libs.google.dagger.android)
+  kapt(libs.google.dagger.compiler)
   implementation(libs.google.zxing)
   implementation(libs.coil)
   debugImplementation libs.flutter.debug

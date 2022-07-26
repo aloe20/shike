@@ -3,7 +3,9 @@ package com.aloe.shike.generic
 import android.app.Application
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application(), DefaultLifecycleObserver {
   lateinit var repository: Repository
 

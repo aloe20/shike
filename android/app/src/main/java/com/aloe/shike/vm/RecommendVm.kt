@@ -3,9 +3,11 @@ package com.aloe.shike.vm
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.aloe.bean.BannerBean
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
-
-class RecommendVm(app: Application) : BaseVm<RecommendState>(app) {
+@HiltViewModel
+class RecommendVm @Inject constructor(app: Application) : BaseVm<RecommendState>(app) {
   var isBannerLoaded = false
     private set
 
