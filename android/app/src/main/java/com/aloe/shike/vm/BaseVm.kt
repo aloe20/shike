@@ -9,6 +9,6 @@ import com.aloe.shike.generic.App
 abstract class BaseVm<T>(app: Application) : AndroidViewModel(app) {
   protected val liveData = MutableLiveData<T>()
   protected val repo = (app as App).repository
-  abstract suspend fun loadData(type: Int = 0)
+  abstract fun loadData(type: Int = 0)
   open fun getUiState():LiveData<T> = liveData
 }

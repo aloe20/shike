@@ -15,11 +15,11 @@ fun HostLayout() {
   val navController = LocalNavController.current
   NavHost(navController = navController, startDestination = Page.Main.name) {
     composable(Page.Main.name) { MainLayout() }
+    composable(Page.Flutter.name) { FlutterLayout() }
     composable(Page.React.name, arguments = listOf(navArgument("url") { type = NavType.StringType })) {
       it.arguments?.getString("url")?.also { url ->
         ReactLayout(url)
       }
-
     }
     composable(Page.Web.name, arguments = listOf(navArgument("url") { type = NavType.StringType })) {
       it.arguments?.getString("url")?.also { url ->
@@ -54,6 +54,7 @@ fun appNavigate(controller: NavController, page: Page) {
 
 sealed class Page(var name: String) {
   object Main : Page("main")
+  object Flutter : Page("flutter")
   object React : Page("react?url={url}") {
     var url: String? = null
       private set

@@ -19,6 +19,7 @@ datastore = "1.0.0"
 fragment = "1.5.0"
 hilt = "1.0.0"
 lifecycle = "2.5.0"
+startup = "1.1.1"
 # https://github.com/google/accompanist
 accompanist = "0.24.13-rc"
 # https://github.com/google/dagger

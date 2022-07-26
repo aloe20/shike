@@ -108,6 +108,15 @@ fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
         .padding(16.dp, 8.dp)
       )
       Spacer(modifier = lineModifier())
+      Text(text = "Flutter", modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+          appNavigate(navController, Page.Flutter)
+          onClick.invoke()
+        }
+        .padding(16.dp, 8.dp)
+      )
+      Spacer(modifier = lineModifier())
     }
     Spacer(
       modifier = Modifier
@@ -158,12 +167,12 @@ fun DrawerContainerLayout(menuClick: () -> Unit, scanClick: () -> Unit) {
           )
         }
       }
-      uiState.value?.banner?.also { list->
+      uiState.value?.banner?.also { list ->
         Text(text = "$list")
       }
     }
   }
-  LaunchedEffect(Unit){
+  if (!vm.isBannerLoaded) {
     vm.loadData()
   }
 }

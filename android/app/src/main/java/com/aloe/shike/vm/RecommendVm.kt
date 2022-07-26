@@ -1,11 +1,19 @@
 package com.aloe.shike.vm
 
 import android.app.Application
+import androidx.lifecycle.viewModelScope
 import com.aloe.bean.BannerBean
+import kotlinx.coroutines.launch
 
 class RecommendVm(app: Application) : BaseVm<RecommendState>(app) {
-  override suspend fun loadData(type: Int) {
-    liveData.postValue(RecommendState(repo.loadBanner().getOrNull()))
+  var isBannerLoaded = false
+    private set
+
+  override fun loadData(type: Int) {
+    isBannerLoaded = true
+    viewModelScope.launch {
+      liveData.postValue(RecommendState(repo.loadBanner().getOrNull()))
+    }
   }
 }
 

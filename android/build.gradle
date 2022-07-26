@@ -42,6 +42,9 @@ subprojects {
           case 'androidx.lifecycle':
             it.useVersion(libs.versions.lifecycle.get())
             break
+          case 'androidx.startup':
+            it.useVersion(libs.versions.startup.get())
+            break
           case 'com.squareup.okio':
             it.useVersion(libs.versions.okio.get())
             break
