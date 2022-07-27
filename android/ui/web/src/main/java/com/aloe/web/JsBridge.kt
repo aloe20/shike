@@ -113,16 +113,13 @@ class JsBridge {
             if (responseId.isNullOrEmpty()) {
               // if had callbackId
               val callbackId = m.callbackId
-              if (m.handlerName.isNullOrEmpty()) {
-                defaultHandler
-              } else {
-                messageHandlers[m.handlerName]
-              }?.takeUnless { callbackId.isNullOrEmpty() }?.invoke(m.data) { data ->
-                val responseMsg = Message()
-                responseMsg.responseId = callbackId
-                responseMsg.responseData = data
-                queueMessage(view, responseMsg)
-              }
+              (if (m.handlerName.isNullOrEmpty()) defaultHandler else messageHandlers[m.handlerName])
+                ?.takeUnless { callbackId.isNullOrEmpty() }?.invoke(m.data) { data ->
+                  val responseMsg = Message()
+                  responseMsg.responseId = callbackId
+                  responseMsg.responseData = data
+                  queueMessage(view, responseMsg)
+                }
             } else {
               val function = responseCallbacks[responseId]
               function?.invoke(m.responseData)

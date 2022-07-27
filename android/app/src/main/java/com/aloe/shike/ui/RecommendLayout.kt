@@ -92,7 +92,7 @@ fun DrawerContentLayout(navController: NavHostController, onClick: () -> Unit) {
       Text(text = "React Native", modifier = Modifier
         .fillMaxWidth()
         .clickable {
-          appNavigate(navController, Page.React.setUrl("assets://index.bundle"))
+          appNavigate(navController, Page.React.setUrl("assets://index.android.bundle"))
           onClick.invoke()
         }
         .padding(16.dp, 8.dp)

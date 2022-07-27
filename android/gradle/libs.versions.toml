@@ -68,7 +68,7 @@ squareup-retrofit-moshi = "com.squareup.retrofit2:converter-moshi:2.9.0"
 squareup-moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 squareup-moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 # https://github.com/facebook/react-native
-rn = "com.facebook.react:react-native:0.69.2"
+rn = "com.facebook.react:react-native:0.69.3"
 jsc = "org.webkit:android-jsc:r250230"
 # https://github.com/coil-kt/coil
 coil = "io.coil-kt:coil-compose:2.1.0"

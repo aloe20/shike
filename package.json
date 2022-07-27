@@ -15,11 +15,10 @@
   },
   "dependencies": {
     "react": "18.0.0",
-    "react-native": "0.69.2",
+    "react-native": "0.69.3",
     "vue": "^3.2.37"
   },
   "devDependencies": {
-    "@types/react-native": "^0.69.2",
     "@vitejs/plugin-vue": "^3.0.0",
     "koa": "^2.13.4",
     "koa-mount": "^4.0.0",
