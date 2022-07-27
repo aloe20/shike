@@ -1,10 +1,9 @@
 package com.aloe.http
 
-import androidx.lifecycle.LiveData
-import androidx.work.WorkInfo
 import com.aloe.bean.BannerBean
+import kotlinx.coroutines.flow.Flow
 
 interface IHttp {
   suspend fun loadBanner(): Result<List<BannerBean>?>
-  fun download(url: String): LiveData<WorkInfo>
+  fun download(url: String, path:String?=null):Flow<Int>
 }

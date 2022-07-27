@@ -1,6 +1,8 @@
 plugins {
   id('com.android.library')
   id('org.jetbrains.kotlin.android')
+  id('org.jetbrains.kotlin.kapt')
+  id('dagger.hilt.android.plugin')
 }
 
 android {
@@ -33,6 +35,7 @@ android {
 
 dependencies {
   api project(path: ':data:bean')
-  api(libs.androidx.work)
   api(libs.squareup.retrofit.moshi)
+  implementation(libs.google.dagger.android)
+  kapt(libs.google.dagger.compiler)
 }

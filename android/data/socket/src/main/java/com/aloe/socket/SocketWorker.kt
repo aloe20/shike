@@ -1,16 +1,8 @@
 package com.aloe.socket
 
-import android.app.Notification
-import android.content.Context
-import androidx.work.*
-import io.netty.util.internal.logging.InternalLoggerFactory
-import io.netty.util.internal.logging.JdkLoggerFactory
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-
-internal class SocketWorker constructor(ctx: Context, params: WorkerParameters) :
-  CoroutineWorker(ctx, params) {
-  private lateinit var clientUdp: ClientUdp
+internal class SocketWorker /*constructor(ctx: Context, params: WorkerParameters) :
+  CoroutineWorker(ctx, params)*/ {
+  /*private lateinit var clientUdp: ClientUdp
   override suspend fun doWork(): Result {
     InternalLoggerFactory.setDefaultFactory(JdkLoggerFactory.INSTANCE)
     if (atomicCollect.compareAndSet(false, true)) {
@@ -35,5 +27,5 @@ internal class SocketWorker constructor(ctx: Context, params: WorkerParameters) 
         ).build()
       )
     }
-  }
+  }*/
 }

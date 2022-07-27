@@ -6,14 +6,11 @@ import androidx.startup.Initializer
 import com.aloe.rn.ReactView
 
 @Suppress("unused")
-class ConfigInitializer:Initializer<Unit> {
+class ConfigInitializer : Initializer<Unit> {
   override fun create(context: Context) {
     AppThread.start()
     AppThread.post { ReactView.initRn(context) }
-    (context as App).also {
-      it.repository = Repository(it)
-      ProcessLifecycleOwner.get().lifecycle.addObserver(it)
-    }
+    ProcessLifecycleOwner.get().lifecycle.addObserver(context as App)
   }
 
   override fun dependencies(): MutableList<Class<out Initializer<*>>> = mutableListOf()

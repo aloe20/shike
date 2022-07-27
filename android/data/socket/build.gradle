@@ -28,6 +28,6 @@ android {
 }
 
 dependencies {
-  api(libs.androidx.work)
+  //api(libs.androidx.work)
   implementation(libs.netty)
 }

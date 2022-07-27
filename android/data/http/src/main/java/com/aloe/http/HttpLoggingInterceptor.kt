@@ -18,7 +18,7 @@ import okio.GzipSource
  * @author Aloe
  * @property logger 日志打印
  */
-class HttpLoggingInterceptor @JvmOverloads constructor(
+internal class HttpLoggingInterceptor @JvmOverloads constructor(
   private val logger: Logger = Logger.DEFAULT
 ) : Interceptor {
 
@@ -30,7 +30,7 @@ class HttpLoggingInterceptor @JvmOverloads constructor(
   var level = Level.NONE
 
   enum class Level {
-    NONE, BASIC, HEADERS, BODY
+    NONE, HEADERS, BODY
   }
 
   fun interface Logger {
@@ -48,24 +48,9 @@ class HttpLoggingInterceptor @JvmOverloads constructor(
     }
   }
 
-  fun redactHeader(name: String) {
-    val newHeadersToRedact = TreeSet(String.CASE_INSENSITIVE_ORDER)
-    newHeadersToRedact += headersToRedact
-    newHeadersToRedact += name
-    headersToRedact = newHeadersToRedact
-  }
-
   fun setLevel(level: Level) = apply {
     this.level = level
   }
-
-  @JvmName("-deprecated_level")
-  @Deprecated(
-    message = "moved to var",
-    replaceWith = ReplaceWith(expression = "level"),
-    level = DeprecationLevel.ERROR
-  )
-  fun getLevel(): Level = level
 
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {

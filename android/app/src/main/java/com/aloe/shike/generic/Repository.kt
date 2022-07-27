@@ -1,6 +1,7 @@
 package com.aloe.shike.generic
 
-import android.content.Context
-import com.aloe.http.HttpRepository
+import com.aloe.http.IHttp
+import javax.inject.Inject
 
-class Repository(context:Context):HttpRepository(context)
+class Repository @Inject constructor(http:IHttp):IHttp by http
+
