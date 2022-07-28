@@ -10,11 +10,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import com.aloe.rn.ReactView
 import com.aloe.shike.ui.HostLayout
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.ExecutorService
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+  @Inject
+  lateinit var executor: ExecutorService
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -27,5 +32,6 @@ class MainActivity : ComponentActivity() {
         }
       }
     }
+    executor.execute { ReactView.initRn(applicationContext) }
   }
 }

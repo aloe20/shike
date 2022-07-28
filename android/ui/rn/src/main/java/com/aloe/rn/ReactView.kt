@@ -120,6 +120,8 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
   fun setBackBtnHandler(callback: () -> Unit) = apply { backCallback = callback }
 
   companion object {
+    @Volatile
+    private var isInitialized = false
     private class ReactHost(app: Application, private val jsBundle: Uri) : ReactNativeHost(app) {
       override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
 
@@ -143,7 +145,12 @@ class ReactView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     fun initRn(context: Context) {
-      SoLoader.init(context, false)
+      if (!isInitialized) {
+        synchronized(Unit) {
+          isInitialized
+          SoLoader.init(context, false)
+        }
+      }
     }
   }
 }

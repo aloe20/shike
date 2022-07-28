@@ -7,11 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.aloe.shike.generic.DetailActivity
+import com.aloe.shike.generic.Native
 
 @Composable
 fun NaviLayout() {
   val context = LocalContext.current
-  Text(text = "ITEM1", modifier = Modifier.clickable {
+  Text(text = Native.hello(), modifier = Modifier.clickable {
     context.startActivity(Intent(context, DetailActivity::class.java))
   })
 }
