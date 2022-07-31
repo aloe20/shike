@@ -23,7 +23,7 @@ startup = "1.1.1"
 # https://github.com/google/accompanist
 accompanist = "0.25.0"
 # https://github.com/google/dagger
-dagger = "2.43"
+dagger = "2.43.1"
 # https://github.com/square/moshi
 moshi = "1.13.0"
 # https://github.com/square/okio

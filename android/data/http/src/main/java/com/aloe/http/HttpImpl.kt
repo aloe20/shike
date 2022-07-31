@@ -2,6 +2,7 @@ package com.aloe.http
 
 import android.content.Context
 import android.os.Environment
+import com.aloe.bean.ArticleBean
 import com.aloe.bean.BannerBean
 import java.io.File
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,8 @@ import okio.source
 
 internal class HttpImpl constructor(private val ctx: Context, private val api: HttpApi) : IHttp {
   override suspend fun loadBanner(): Result<List<BannerBean>?> = runCatching { api.loadBanner().data }
+  override suspend fun loadTop(): Result<List<ArticleBean>?> = runCatching { api.loadTop().data }
+
   override fun download(url: String, path: String?): Flow<Int> = flow {
     val name = url.substring(url.lastIndexOf("/") + 1)
     val file = if (path == null) File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), name) else File(path)

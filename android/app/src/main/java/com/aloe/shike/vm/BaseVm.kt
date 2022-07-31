@@ -7,8 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import com.aloe.shike.generic.App
 
 abstract class BaseVm<T>(app: Application) : AndroidViewModel(app) {
+  private var isLoadedData = false
   protected val liveData = MutableLiveData<T>()
   protected val repo = (app as App).repository
-  abstract fun loadData(type: Int = 0)
+  fun firstLoadData(){
+    if (!isLoadedData) {
+      isLoadedData = true
+      loadData()
+    }
+  }
+  abstract fun loadData()
   open fun getUiState():LiveData<T> = liveData
 }

@@ -1,0 +1,5 @@
+GET http://localhost:3000/banner/json
+###
+
+GET http://localhost:3000/article/top/json
+###
